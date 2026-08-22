@@ -5,4 +5,8 @@ export {
   type GenerateOpts,
   type WorldGenResult,
 } from './world';
-export { generateTruth, pickTemplate } from './truth';
+export {
+  generateTruth,
+  resolveSelection,
+  CaseSelectionError,
+} from './truth';

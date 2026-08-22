@@ -1,51 +1,11 @@
 /** Truth-graph generation: template selection + CaseTruth DAG from template. */
 
 import { createRng, type Rng } from '../rng';
-import {
-  getTemplate,
-  templatesForArchetype,
-  type FailureModeTemplate,
-} from '../templates';
+import type { FailureModeTemplate } from '../templates';
 import type { Archetype } from '../archetypes';
-import type {
-  CaseTruth,
-  CausalNode,
-  Difficulty,
-  TemplateId,
-} from '../types';
+import type { CaseTruth, CausalNode, Difficulty } from '../types';
 import type { GenerateOpts } from './world';
-
-/** Curated seed → template (DESIGN B2.13: seed 1174 is A2 / T4). */
-const CURATED_TEMPLATE: Readonly<Record<string, TemplateId>> = {
-  '1174': 'T4',
-};
-
-function pickTemplate(
-  seed: string,
-  archetypeId: Archetype['id'],
-  rng: Rng,
-  opts: GenerateOpts,
-): FailureModeTemplate {
-  if (opts.template) {
-    const t = getTemplate(opts.template);
-    if (!t.archetypes.includes(archetypeId)) {
-      throw new Error(
-        `Template ${opts.template} not valid for archetype ${archetypeId}`,
-      );
-    }
-    return t;
-  }
-  const curated = CURATED_TEMPLATE[seed];
-  if (curated) {
-    const t = getTemplate(curated);
-    if (t.archetypes.includes(archetypeId)) return t;
-  }
-  const candidates = templatesForArchetype(archetypeId);
-  if (candidates.length === 0) {
-    throw new Error(`No templates for archetype ${archetypeId}`);
-  }
-  return rng.pick(candidates);
-}
+import { resolveSelection } from './resolve';
 
 function drawRedHerrings(
   template: FailureModeTemplate,
@@ -71,16 +31,12 @@ function drawRedHerrings(
 
 /**
  * Filter node reveal links to evidence the archetype can actually produce.
- * Keeps solvability (≥2 reveals) by relying on template withoutRecorders coverage.
  */
 function filterRevealsForArchetype(
   nodes: CausalNode[],
   archetype: Archetype,
-  template: FailureModeTemplate,
+  _template: FailureModeTemplate,
 ): CausalNode[] {
-  const hookById = new Map(
-    template.evidenceHooks.map((h) => [h.evidenceId, h]),
-  );
   const hasFdr = archetype.recorders.fdr !== 'none';
   const hasCvr = archetype.recorders.cvr;
   const hasEngineNvm = archetype.recorders.engineMonitorNvm;
@@ -93,8 +49,6 @@ function filterRevealsForArchetype(
       if (id === 'cvr.transcript' && !hasCvr) return false;
       if (id === 'nvm.engine_monitor' && !hasEngineNvm) return false;
       if (id === 'nvm.portable_gps' && !hasGps) return false;
-      const hook = hookById.get(id);
-      if (!hook) return true; // catalogue may still add generic items
       return true;
     });
     return { ...node, revealedBy };
@@ -103,7 +57,6 @@ function filterRevealsForArchetype(
 
 /**
  * Build CaseTruth from selected template + red-herring draw.
- * Uses rng.fork('template') for selection and herring draws.
  */
 export function generateTruth(
   seed: string,
@@ -111,8 +64,12 @@ export function generateTruth(
   difficulty: Difficulty,
   opts: GenerateOpts = {},
 ): { truth: CaseTruth; template: FailureModeTemplate } {
-  const templateRng = createRng(seed).fork('template');
-  const template = pickTemplate(seed, archetype.id, templateRng, opts);
+  const resolved = resolveSelection(seed, {
+    ...opts,
+    archetype: opts.archetype ?? archetype.id,
+    difficulty,
+  });
+  const template = resolved.template;
 
   const baseNodes = filterRevealsForArchetype(
     template.nodes.map((n) => ({
@@ -124,7 +81,11 @@ export function generateTruth(
     template,
   );
 
-  const herrings = drawRedHerrings(template, difficulty, templateRng);
+  const herrings = drawRedHerrings(
+    template,
+    difficulty,
+    createRng(seed).fork('template'),
+  );
   const nodes = [...baseNodes, ...herrings];
 
   const truth: CaseTruth = {
@@ -139,4 +100,4 @@ export function generateTruth(
   return { truth, template };
 }
 
-export { pickTemplate };
+export { resolveSelection, CaseSelectionError } from './resolve';

@@ -45,7 +45,13 @@ export type {
   TemplateValidationIssue,
 } from './templates';
 
-export { generateWorld, generateTruth, type GenerateOpts } from './generate';
+export {
+  generateWorld,
+  generateTruth,
+  resolveSelection,
+  CaseSelectionError,
+  type GenerateOpts,
+} from './generate';
 export { simulateFlight, type FlightTrack, type FlightSample } from './sim';
 export { buildEvidence } from './evidence';
 export {

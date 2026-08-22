@@ -49,7 +49,7 @@ describe('failure-mode templates (P1)', () => {
 
   it('T1 validates: PC, reveal coverage, A1 without-recorders', () => {
     expectValid(T1_VFR_IMC);
-    expect(T1_VFR_IMC.archetypes).toEqual(['A1', 'A2']);
+    expect(T1_VFR_IMC.archetypes).toEqual(['A1']);
     expect(
       T1_VFR_IMC.nodes.filter((n) => n.tier === 'probableCause').length,
     ).toBeGreaterThanOrEqual(1);
@@ -115,8 +115,9 @@ describe('failure-mode templates (P1)', () => {
       expect.arrayContaining(['T1', 'T2']),
     );
     expect(templatesForArchetype('A2').map((t) => t.id)).toEqual(
-      expect.arrayContaining(['T1', 'T2', 'T4']),
+      expect.arrayContaining(['T2', 'T4']),
     );
+    expect(templatesForArchetype('A2').map((t) => t.id)).not.toContain('T1');
     expect(templatesForArchetype('A3').map((t) => t.id)).toEqual(['T6']);
     expect(templatesForArchetype('A4').map((t) => t.id)).toEqual(['T6']);
   });

@@ -1,7 +1,7 @@
 /** World generation: archetype → operator → crew → maintenance → environment. */
 
 import { createRng, type Rng } from '../rng';
-import { getArchetype, listArchetypes } from '../archetypes';
+import { resolveSelection } from './resolve';
 import type { Archetype } from '../archetypes';
 import type {
   ArchetypeId,
@@ -122,18 +122,6 @@ const AIRPORTS: ReadonlyArray<{
     elevationFt: 890,
   },
 ];
-
-/** Curated seed → archetype (matches DESIGN B2.13 walkthrough for 1174). */
-const CURATED_ARCHETYPE: Readonly<Record<string, ArchetypeId>> = {
-  '1174': 'A2',
-};
-
-function pickArchetype(seed: string, rng: Rng, opts: GenerateOpts): Archetype {
-  if (opts.archetype) return getArchetype(opts.archetype);
-  const curated = CURATED_ARCHETYPE[seed];
-  if (curated) return getArchetype(curated);
-  return rng.pick(listArchetypes());
-}
 
 function buildOperator(arch: Archetype, rng: Rng): OperatorProfile {
   return {
@@ -261,8 +249,9 @@ export function generateWorld(seed: string, opts: GenerateOpts = {}): WorldGenRe
   const maintRng = root.fork('maintenance');
   const wxRng = root.fork('weather');
 
-  const archetype = pickArchetype(seed, worldRng, opts);
-  const difficulty: Difficulty = opts.difficulty ?? 'standard';
+  const resolved = resolveSelection(seed, opts);
+  const archetype = resolved.archetype;
+  const difficulty = resolved.difficulty;
   const operator = buildOperator(archetype, worldRng);
   const fatalHeavy = worldRng.chance(0.65);
   const crew = buildCrew(archetype, crewRng, fatalHeavy);

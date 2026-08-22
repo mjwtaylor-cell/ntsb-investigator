@@ -1,4 +1,4 @@
-/** T1 — VFR into IMC / spatial disorientation (A1, A2). Fictional only. */
+/** T1 — VFR into IMC / spatial disorientation (A1). Fictional only. */
 
 import type { FailureModeTemplate } from './schema';
 
@@ -11,7 +11,7 @@ export const T1_VFR_IMC: FailureModeTemplate = {
   name: 'VFR into IMC / spatial disorientation',
   summary:
     'Night VFR continued into IMC; spatial disorientation and loss of control.',
-  archetypes: ['A1', 'A2'],
+  archetypes: ['A1'],
   parameters: [
     {
       key: 'timeOfDay',

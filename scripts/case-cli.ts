@@ -2,10 +2,16 @@
 /**
  * Case CLI: `case -- --seed 1174` prints a one-screen summary.
  * Optional `--json [path]` dumps the bundle.
+ * `--archetype` / `--template` force selection; incompatible pairs error kindly.
  */
 
 import { writeFileSync } from 'node:fs';
-import { generateCase, getArchetype, getTemplate } from '../src/engine/index.ts';
+import {
+  generateCase,
+  getArchetype,
+  getTemplate,
+  CaseSelectionError,
+} from '../src/engine/index.ts';
 
 function parseArgs(argv: string[]): {
   seed: string;
@@ -47,16 +53,24 @@ function parseArgs(argv: string[]): {
 
 function main(): void {
   const args = parseArgs(process.argv.slice(2));
-  const bundle = generateCase(args.seed, {
-    archetype: args.archetype as 'A1' | 'A2' | 'A3' | 'A4' | undefined,
-    template: args.template as
-      | 'T1'
-      | 'T2'
-      | 'T4'
-      | 'T6'
-      | undefined,
-    difficulty: args.difficulty,
-  });
+  let bundle;
+  try {
+    bundle = generateCase(args.seed, {
+      archetype: args.archetype as 'A1' | 'A2' | 'A3' | 'A4' | undefined,
+      template: args.template as 'T1' | 'T2' | 'T4' | 'T6' | undefined,
+      difficulty: args.difficulty,
+    });
+  } catch (err) {
+    if (err instanceof CaseSelectionError) {
+      console.error(`Error: ${err.message}`);
+      process.exit(1);
+    }
+    if (err instanceof Error && /Unknown (archetype|template)/i.test(err.message)) {
+      console.error(`Error: ${err.message}`);
+      process.exit(1);
+    }
+    throw err;
+  }
 
   const arch = getArchetype(bundle.truth.archetypeId);
   const tmpl = getTemplate(bundle.truth.templateId);
@@ -66,6 +80,11 @@ function main(): void {
     .map((n) => `  [${n.tier}] ${n.id}: ${n.text.slice(0, 90)}`)
     .join('\n');
 
+  const crewN =
+    bundle.world.occupants.crewFlight + bundle.world.occupants.crewCabin;
+  const occ = bundle.world.occupants;
+  const minor = 'minorInjuries' in occ ? (occ as { minorInjuries: number }).minorInjuries : 0;
+
   const summary = [
     `NTSB Investigator — case seed ${args.seed}`,
     `Archetype: ${arch.id} ${arch.name} (Part ${arch.opsPart})`,
@@ -73,7 +92,7 @@ function main(): void {
     `Difficulty: ${bundle.truth.difficulty}`,
     `Location:  ${bundle.world.environment.airportName}, ${bundle.world.environment.state} (${bundle.world.environment.timeOfDay})`,
     `Operator:  ${bundle.world.operator.name}`,
-    `Occupants: ${bundle.world.occupants.passengers} pax / fatals ${bundle.world.occupants.fatalities}`,
+    `Occupants: ${occ.passengers} pax + ${crewN} crew · fatal ${occ.fatalities} · serious ${occ.seriousInjuries} · minor ${minor}`,
     `Flight:    ${bundle.flight.samples.length} samples @ 1 Hz; events: ${bundle.flight.events.map((e) => e.eventId).join(', ') || '(none)'}`,
     `Evidence:  ${bundle.evidence.length} catalogue items`,
     `Par:       ${bundle.par.investigatorDays} inv-days / ${bundle.par.calendarDays} calendar days`,
