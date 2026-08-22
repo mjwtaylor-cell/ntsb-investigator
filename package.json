@@ -11,7 +11,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "case": "tsx scripts/case-cli.ts"
+    "case": "tsx scripts/case-cli.ts",
+    "solvability": "tsx scripts/solvability.ts"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.2.5",
