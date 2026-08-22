@@ -55,7 +55,7 @@ export const T4_ICING: FailureModeTemplate = {
     {
       id: 'precondition.boots_inoperative',
       kind: 'precondition',
-      tier: 'precondition',
+      tier: 'contributing',
       text: 'The pneumatic de-ice boots on the outboard wing were inoperative at dispatch.',
       revealedBy: [
         { evidenceId: 'maint.mel_deferred_list', strength: 0.9 },
@@ -78,7 +78,7 @@ export const T4_ICING: FailureModeTemplate = {
     {
       id: 'propagation.wing_tail_stall',
       kind: 'propagation',
-      tier: 'contributing',
+      tier: 'probableCause',
       text: 'Ice-contaminated wing and tailplane aerodynamics produced a stall during configuration change on approach.',
       revealedBy: [
         { evidenceId: 'fdr.readout', strength: 0.95 },
@@ -286,6 +286,7 @@ export const T4_ICING: FailureModeTemplate = {
     },
   ],
   redHerringDraw: { min: 1, max: 3 },
+  probableCauseNodeIds: ['initiating.airframe_icing', 'propagation.wing_tail_stall'],
   parCostStub: {
     investigatorDays: 18,
     calendarDays: 55,

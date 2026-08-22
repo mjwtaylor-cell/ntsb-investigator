@@ -99,5 +99,10 @@ export interface FailureModeTemplate {
   /** Pool from which 1–3 nonCausal nodes are drawn. */
   redHerringPool: RedHerringSlot[];
   redHerringDraw: { min: number; max: number };
+  /**
+   * Explicit probable-cause node ids.
+   * Default convention: initiating event + propagation mechanism.
+   */
+  probableCauseNodeIds: readonly string[];
   parCostStub: ParCostStub;
 }

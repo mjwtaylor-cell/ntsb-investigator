@@ -44,7 +44,7 @@ export const T2_FUEL: FailureModeTemplate = {
     {
       id: 'precondition.no_visual_fuel_check',
       kind: 'precondition',
-      tier: 'precondition',
+      tier: 'contributing',
       text: 'The pilot did not verify fuel quantity by visual inspection of the tanks before departure.',
       revealedBy: [
         { evidenceId: 'ops.pilot_interview_fuel', strength: 0.8 },
@@ -67,7 +67,7 @@ export const T2_FUEL: FailureModeTemplate = {
     {
       id: 'propagation.forced_landing_stall',
       kind: 'propagation',
-      tier: 'contributing',
+      tier: 'probableCause',
       text: 'During the attempted forced landing the airplane stalled at low altitude and descended uncontrolled into terrain.',
       revealedBy: [
         { evidenceId: 'adsb.track', strength: 0.8 },
@@ -270,6 +270,7 @@ export const T2_FUEL: FailureModeTemplate = {
     },
   ],
   redHerringDraw: { min: 1, max: 3 },
+  probableCauseNodeIds: ['initiating.fuel_exhaustion', 'propagation.forced_landing_stall'],
   parCostStub: {
     investigatorDays: 12,
     calendarDays: 35,

@@ -46,7 +46,7 @@ export const T6_UNCONTAINED_ENGINE: FailureModeTemplate = {
     {
       id: 'precondition.fatigue_crack_present',
       kind: 'precondition',
-      tier: 'precondition',
+      tier: 'contributing',
       text: 'A fatigue crack was present in the fan disk and had progressed beyond the size detectable at the last performed inspection.',
       revealedBy: [
         { evidenceId: 'lab.fractography_fan_disk', strength: 0.98 },
@@ -69,7 +69,7 @@ export const T6_UNCONTAINED_ENGINE: FailureModeTemplate = {
     {
       id: 'propagation.hydraulic_fire_loss',
       kind: 'propagation',
-      tier: 'contributing',
+      tier: 'probableCause',
       text: 'Released fragments severed hydraulic lines and ignited a fuel-fed fire, degrading flight controls and systems.',
       revealedBy: [
         { evidenceId: 'systems.hydraulic_exam', strength: 0.9 },
@@ -306,6 +306,7 @@ export const T6_UNCONTAINED_ENGINE: FailureModeTemplate = {
     },
   ],
   redHerringDraw: { min: 1, max: 3 },
+  probableCauseNodeIds: ['initiating.uncontained_disk_failure', 'propagation.hydraulic_fire_loss'],
   parCostStub: {
     investigatorDays: 28,
     calendarDays: 90,

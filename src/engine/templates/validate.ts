@@ -77,6 +77,37 @@ export function validateTemplate(
     });
   }
 
+  if (!template.probableCauseNodeIds || template.probableCauseNodeIds.length < 1) {
+    issues.push({
+      code: 'pc.empty',
+      message: 'probableCauseNodeIds must list ≥1 node',
+    });
+  } else {
+    for (const id of template.probableCauseNodeIds) {
+      if (!nodeIds.has(id)) {
+        issues.push({
+          code: 'pc.unknownNode',
+          message: `probableCauseNodeIds references unknown ${id}`,
+        });
+      } else {
+        const node = template.nodes.find((n) => n.id === id)!;
+        if (node.tier !== 'probableCause') {
+          issues.push({
+            code: 'pc.tierMismatch',
+            message: `PC node ${id} must have tier probableCause (has ${node.tier})`,
+          });
+        }
+        if (node.kind === 'outcome') {
+          issues.push({
+            code: 'pc.outcome',
+            message: `Outcome node ${id} cannot be in the PC set`,
+          });
+        }
+      }
+    }
+  }
+
+
   const { min, max } = template.redHerringDraw;
   if (min < 1 || max > 3 || min > max) {
     issues.push({

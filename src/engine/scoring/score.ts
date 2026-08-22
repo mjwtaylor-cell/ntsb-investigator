@@ -17,8 +17,14 @@ export interface FindingsInput {
   recommendations: PlayerRecommendation[];
 }
 
+/** Scorable causal nodes — outcomes are never claimable / covered. */
 function causalNodes(bundle: CaseBundle) {
-  return bundle.truth.nodes.filter((n) => n.tier !== 'nonCausal');
+  return bundle.truth.nodes.filter(
+    (n) =>
+      n.tier !== 'nonCausal' &&
+      n.kind !== 'nonCausalCondition' &&
+      n.kind !== 'outcome',
+  );
 }
 
 function nonCausalIds(bundle: CaseBundle): Set<string> {

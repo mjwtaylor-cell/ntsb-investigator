@@ -55,6 +55,24 @@ function filterRevealsForArchetype(
   });
 }
 
+
+/** Honour template.probableCauseNodeIds; non-PC causal → contributing. */
+function applyDeclaredTiers(
+  nodes: CausalNode[],
+  template: FailureModeTemplate,
+): CausalNode[] {
+  const pc = new Set(template.probableCauseNodeIds);
+  return nodes.map((node) => {
+    if (node.tier === 'nonCausal' || node.kind === 'nonCausalCondition') {
+      return node;
+    }
+    if (pc.has(node.id)) {
+      return { ...node, tier: 'probableCause' as const };
+    }
+    return { ...node, tier: 'contributing' as const };
+  });
+}
+
 /**
  * Build CaseTruth from selected template + red-herring draw.
  */
@@ -71,13 +89,16 @@ export function generateTruth(
   });
   const template = resolved.template;
 
-  const baseNodes = filterRevealsForArchetype(
-    template.nodes.map((n) => ({
-      ...n,
-      revealedBy: n.revealedBy.map((r) => ({ ...r })),
-      conflictsWith: n.conflictsWith ? [...n.conflictsWith] : undefined,
-    })),
-    archetype,
+  const baseNodes = applyDeclaredTiers(
+    filterRevealsForArchetype(
+      template.nodes.map((n) => ({
+        ...n,
+        revealedBy: n.revealedBy.map((r) => ({ ...r })),
+        conflictsWith: n.conflictsWith ? [...n.conflictsWith] : undefined,
+      })),
+      archetype,
+      template,
+    ),
     template,
   );
 

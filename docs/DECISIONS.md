@@ -43,3 +43,12 @@ Hard-mapped seed `1174` to archetype A2 + template T4 so the DESIGN B2.13 walkth
 lookup. Durable SHA-256 golden hash covers truth/world/evidence/par only (not
 bulk samples). Recommendation completeness awards ≥15 when every latent/precondition
 is targeted so truth-oracle ≥95 holds for short chains.
+
+## 22 Aug 2026 — P1.5 tiers: explicit PC set; outcomes not scorable
+
+Each template declares `probableCauseNodeIds` (default = initiating event +
+propagation mechanism). T4 PC = icing accretion + ice-induced stall. Latent,
+precondition, and crew/dispatch nodes are contributing unless listed in the PC
+set. Outcome nodes remain on the truth graph for narrative/wreckage linkage but
+are excluded from coverage, claimable findings, and solvability reveal checks.
+Oracles re-run green (truth 98 / empty 10 on seed 1174). Golden hash regenerated.

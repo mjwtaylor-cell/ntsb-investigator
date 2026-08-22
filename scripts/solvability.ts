@@ -47,7 +47,10 @@ export function bundleHash(bundle: CaseBundle): string {
 
 function causalNodes(bundle: CaseBundle) {
   return bundle.truth.nodes.filter(
-    (n) => n.tier !== 'nonCausal' && n.kind !== 'nonCausalCondition',
+    (n) =>
+      n.tier !== 'nonCausal' &&
+      n.kind !== 'nonCausalCondition' &&
+      n.kind !== 'outcome',
   );
 }
 

@@ -33,4 +33,21 @@ describe('scoring + oracles', () => {
     const o = runOracles(b, state);
     expect(o.pass).toBe(true);
   });
+
+  it('outcome nodes are not claimable in truthFindings / coverage', () => {
+    const b = bundle('1174');
+    const outcomes = b.truth.nodes.filter((n) => n.kind === 'outcome');
+    expect(outcomes.length).toBeGreaterThan(0);
+    const tf = truthFindings(b);
+    for (const o of outcomes) {
+      expect(tf.findings.some((f) => f.claimedNodeId === o.id)).toBe(false);
+    }
+    const pc = b.truth.nodes.filter((n) => n.tier === 'probableCause');
+    expect(pc.map((n) => n.id).sort()).toEqual(
+      ['initiating.airframe_icing', 'propagation.wing_tail_stall'].sort(),
+    );
+    // precondition / latent are contributing
+    const boots = b.truth.nodes.find((n) => n.id === 'precondition.boots_inoperative');
+    expect(boots?.tier).toBe('contributing');
+  });
 });

@@ -44,7 +44,7 @@ export const T1_VFR_IMC: FailureModeTemplate = {
     {
       id: 'precondition.ifr_currency_lapsed',
       kind: 'precondition',
-      tier: 'precondition',
+      tier: 'contributing',
       text: "The pilot's instrument currency had lapsed and recent instrument practice was limited.",
       revealedBy: [
         { evidenceId: 'ops.pilot_certificates_recency', strength: 0.95 },
@@ -66,7 +66,7 @@ export const T1_VFR_IMC: FailureModeTemplate = {
     {
       id: 'propagation.spatial_disorientation',
       kind: 'propagation',
-      tier: 'contributing',
+      tier: 'probableCause',
       text: 'After entering clouds the pilot experienced spatial disorientation and lost aircraft control in a developing spiral dive.',
       revealedBy: [
         { evidenceId: 'adsb.track', strength: 0.85 },
@@ -261,6 +261,7 @@ export const T1_VFR_IMC: FailureModeTemplate = {
     },
   ],
   redHerringDraw: { min: 1, max: 3 },
+  probableCauseNodeIds: ['initiating.continued_vfr_imc', 'propagation.spatial_disorientation'],
   parCostStub: {
     investigatorDays: 14,
     calendarDays: 40,

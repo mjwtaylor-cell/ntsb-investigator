@@ -19,7 +19,10 @@ function expectValid(template: FailureModeTemplate): void {
 
 function causalNodes(template: FailureModeTemplate) {
   return template.nodes.filter(
-    (n) => n.tier !== 'nonCausal' && n.kind !== 'nonCausalCondition',
+    (n) =>
+      n.tier !== 'nonCausal' &&
+      n.kind !== 'nonCausalCondition' &&
+      n.kind !== 'outcome',
   );
 }
 
@@ -67,6 +70,10 @@ describe('failure-mode templates (P1)', () => {
 
   it('T4 validates: PC, reveal coverage, A2-only icing/MEL', () => {
     expectValid(T4_ICING);
+    expect(T4_ICING.probableCauseNodeIds).toEqual([
+      'initiating.airframe_icing',
+      'propagation.wing_tail_stall',
+    ]);
     expect(T4_ICING.archetypes).toEqual(['A2']);
     expect(T4_ICING.nodes.some((n) => n.id === 'latent.mel_misuse')).toBe(true);
     expect(

@@ -22,7 +22,10 @@ describe('evidence catalogue', () => {
     }
 
     const causal = truth.nodes.filter(
-      (n) => n.tier !== 'nonCausal' && n.kind !== 'nonCausalCondition',
+      (n) =>
+        n.tier !== 'nonCausal' &&
+        n.kind !== 'nonCausalCondition' &&
+        n.kind !== 'outcome',
     );
     for (const node of causal) {
       const revealers = catalogue.filter((e) =>
