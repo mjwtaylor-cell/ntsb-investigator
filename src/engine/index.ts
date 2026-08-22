@@ -21,6 +21,27 @@ export type {
   FdrCapability,
 } from './archetypes';
 
+export {
+  TEMPLATES,
+  TEMPLATE_IDS,
+  getTemplate,
+  listTemplates,
+  templatesForArchetype,
+  validateTemplate,
+  assertValidTemplate,
+  T1_VFR_IMC,
+} from './templates';
+export type {
+  FailureModeTemplate,
+  FlightPhase,
+  FlightScriptHook,
+  EvidenceHook,
+  RedHerringSlot,
+  ParCostStub,
+  TemplateParameter,
+  TemplateValidationIssue,
+} from './templates';
+
 export function generateCase(_seed?: string): never {
   void _seed;
   throw new Error('engine not yet implemented');
