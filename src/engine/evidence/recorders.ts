@@ -1,4 +1,4 @@
-/** Recorder / NVM evidence stubs derived from archetype + track. */
+/** FDR / CVR / NVM evidence stubs derived from flight track + archetype. */
 
 import type { Archetype } from '../archetypes';
 import type { EvidenceItem } from '../types';
@@ -8,30 +8,61 @@ export function buildRecorderItems(
   archetype: Archetype,
   track: FlightTrack,
 ): EvidenceItem[] {
-  void track;
   const items: EvidenceItem[] = [];
+  const impact = track.samples[track.impactIndex];
+  const note = impact
+    ? `impact≈${impact.ias_kt} kt / ${impact.pitch_deg}° pitch`
+    : 'no impact sample';
+
   if (archetype.recorders.fdr !== 'none') {
     items.push({
-      id: 'recorders.fdr_capability_note',
+      id: 'fdr.readout',
       group: 'recorders',
-      title: `FDR fitment note (${archetype.recorders.fdr})`,
-      cost: 0,
-      leadTime: 0,
-      prereqs: [],
+      title:
+        archetype.recorders.fdr === 'lightweight'
+          ? 'Lightweight FDR readout'
+          : 'FDR parametric readout',
+      cost: 3,
+      leadTime: 14,
+      prereqs: ['recorders.recovery'],
       reveals: [],
-      renderer: 'document',
+      renderer: 'trace',
     });
   }
   if (archetype.recorders.cvr) {
     items.push({
-      id: 'recorders.cvr_capability_note',
+      id: 'cvr.transcript',
       group: 'recorders',
-      title: 'CVR fitment note',
-      cost: 0,
-      leadTime: 0,
-      prereqs: [],
+      title: 'CVR transcript',
+      cost: 3,
+      leadTime: 14,
+      prereqs: ['recorders.recovery'],
       reveals: [],
-      renderer: 'document',
+      renderer: 'transcript',
+    });
+  }
+  if (archetype.recorders.engineMonitorNvm) {
+    items.push({
+      id: 'nvm.engine_monitor',
+      group: 'systems',
+      title: `Engine-monitor NVM (${note})`,
+      cost: 2,
+      leadTime: 4,
+      prereqs: ['nvm.device_recovery'],
+      reveals: [],
+      renderer: 'trace',
+    });
+  }
+  if (archetype.recorders.portableGps) {
+    items.push({
+      id: 'nvm.portable_gps',
+      group: 'systems',
+      title: 'Portable / panel GPS track log',
+      cost: 2,
+      leadTime: 4,
+      prereqs: ['nvm.device_recovery'],
+      reveals: [],
+      renderer: 'trace',
     });
   }
   return items;

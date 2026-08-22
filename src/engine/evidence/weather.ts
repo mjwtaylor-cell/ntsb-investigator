@@ -1,4 +1,4 @@
-/** Weather package evidence derived from truth + track winds. */
+/** Weather package evidence (METAR/TAF/AIRMET style stubs). */
 
 import type { CaseTruth, EvidenceItem } from '../types';
 import type { FlightTrack } from '../sim';
@@ -7,21 +7,31 @@ export function buildWeatherItems(
   truth: CaseTruth,
   track: FlightTrack,
 ): EvidenceItem[] {
-  void truth;
-  const sample = track.samples[Math.min(track.impactIndex, track.samples.length - 1)];
-  const wind = sample
-    ? `${sample.windDir_deg}°/${sample.windSpeed_kt} kt`
-    : 'unknown';
+  void track;
+  const icing = truth.templateId === 'T4' || truth.templateId === 'T1';
   return [
     {
-      id: 'wx.site_observation_stub',
+      id: 'wx.metar_taf_package',
       group: 'meteorology',
-      title: `Near-site wind estimate at impact (${wind})`,
+      title: 'METAR/TAF/AIRMET package along route',
       cost: 1,
       leadTime: 1,
       prereqs: [],
-      reveals: [],
       decay: 30,
+      reveals: [],
+      renderer: 'document',
+    },
+    {
+      id: 'wx.icing_airmet_pirep',
+      group: 'meteorology',
+      title: icing
+        ? 'Icing AIRMET / PIREP package'
+        : 'Upper-air sounding and winds aloft',
+      cost: 1,
+      leadTime: 2,
+      prereqs: [],
+      decay: 30,
+      reveals: [],
       renderer: 'document',
     },
   ];

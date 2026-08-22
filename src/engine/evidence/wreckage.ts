@@ -1,31 +1,43 @@
-/** Wreckage evidence stubs derived from impact sample. */
+/** Wreckage / impact geometry evidence from final flight state. */
 
 import type { EvidenceItem } from '../types';
 import type { FlightTrack } from '../sim';
 
 export function buildWreckageItems(track: FlightTrack): EvidenceItem[] {
-  const impact = track.samples[track.impactIndex] ?? track.samples.at(-1);
-  const speed = impact?.ias_kt ?? 0;
-  const angle = impact ? Math.abs(impact.pitch_deg) : 0;
-  const trail = Math.round(speed * Math.cos((angle * Math.PI) / 180) * 8);
+  const impact = track.samples[track.impactIndex];
+  const steep = impact ? Math.abs(impact.pitch_deg) > 12 : false;
   return [
     {
-      id: 'structures.debris_trail_estimate',
+      id: 'structures.wreckage_map',
       group: 'structures',
-      title: `Debris trail length estimate (~${Math.max(20, trail)} ft stub)`,
-      cost: 1,
-      leadTime: 2,
-      prereqs: ['structures.wreckage_map'],
+      title: steep
+        ? 'Wreckage distribution map (compact high-angle field)'
+        : 'Wreckage distribution map and PIP',
+      cost: 3,
+      leadTime: 5,
+      prereqs: [],
       reveals: [],
-      renderer: 'document',
+      renderer: 'map',
     },
     {
-      id: 'structures.photo_set_site',
+      id: 'structures.ground_scar_survey',
       group: 'structures',
-      title: 'Site photo set (PIP / ground scar)',
-      cost: 1,
-      leadTime: 1,
+      title: steep
+        ? 'Ground-scar / crater survey'
+        : 'Ground-scar and slide-path survey',
+      cost: 2,
+      leadTime: 4,
       prereqs: [],
+      reveals: [],
+      renderer: 'photo-set',
+    },
+    {
+      id: 'systems.cockpit_switch_exam',
+      group: 'systems',
+      title: 'Cockpit switch and instrument-position exam',
+      cost: 2,
+      leadTime: 3,
+      prereqs: ['structures.wreckage_map'],
       reveals: [],
       renderer: 'photo-set',
     },

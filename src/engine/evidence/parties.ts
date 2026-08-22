@@ -1,18 +1,18 @@
-/** Party submission stubs. */
+/** Party submission evidence stubs. */
 
 import type { EvidenceItem } from '../types';
 
 export function buildPartyItems(): EvidenceItem[] {
   return [
     {
-      id: 'parties.manufacturer_submission',
+      id: 'parties.operator_submission',
       group: 'parties',
-      title: 'Manufacturer party submission',
+      title: 'Operator party submission',
       cost: 1,
-      leadTime: 45,
+      leadTime: 30,
       prereqs: [],
-      partyCooperationMin: 35,
-      partyId: 'manufacturer',
+      partyCooperationMin: 40,
+      partyId: 'operator',
       reveals: [],
       renderer: 'document',
     },
