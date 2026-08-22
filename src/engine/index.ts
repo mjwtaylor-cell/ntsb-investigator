@@ -1,6 +1,25 @@
 export type * from './types';
 export { NODE_TIER_WEIGHT } from './types';
 export { createRng, hashSeed, type Rng } from './rng';
+export {
+  ARCHETYPES,
+  ARCHETYPE_IDS,
+  getArchetype,
+  listArchetypes,
+  A1_MERIDIAN,
+  A2_KESTREL,
+  A3_AURORA,
+  A4_HALCYON,
+} from './archetypes';
+export type {
+  Archetype,
+  AircraftSystems,
+  PerformanceEnvelope,
+  RecorderCapabilities,
+  AntiIceSystem,
+  AutopilotLevel,
+  FdrCapability,
+} from './archetypes';
 
 export function generateCase(_seed?: string): never {
   void _seed;
