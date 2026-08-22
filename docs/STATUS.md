@@ -1,6 +1,6 @@
 # STATUS.md
 
-**Phase:** P0 Bootstrap — complete; waiting for GO P1
+**Phase:** P1 Engine — in progress (session 1)
 **Updated:** 22 Aug 2026 (America/Chicago)
 
 ## Current state
@@ -20,7 +20,14 @@
   - `docket-desktop-1440.png`
   - `docket-narrow-390.png`
   - `p0-docket-live.webp`
-- Note: right rail clips at ~1280px viewport width.
+- Note: right rail clips at ~1280px viewport width (logged as P2; do not fix in P1).
+
+## P1 session 1 (this session)
+
+- **B4 domain read first** (time-boxed): process page, Major Investigations Manual (report-format + group-responsibility sections + Apps B/H/K), Party Guidance; three CAROL reports for tone only.
+- Expanded `docs/DOMAIN.md` → **Conventions used by the engine** (FDR keys, CVR notation, PC/findings/recs style, wreckage vocab, radar timing, groups, Annex 13 map).
+- Logged P2 UI issues in `docs/DECISIONS.md`.
+- **Not started yet:** accident templates / engine generate path (deferred until after B4).
 
 ## Verified
 
@@ -28,10 +35,6 @@
 - Lint / test / build pass after scaffold
 - CI green; Pages green on live URL above
 
-## Waiting
+## Next
 
-- GO P1 (do not start P1 until GO)
-
-## Next (after GO P1)
-
-- Engine core: rng, types, archetypes, templates, world/truth, sim, evidence, scoring, CLI, solvability harness
+- Engine core after B4: rng, types, archetypes, templates, world/truth, sim, evidence, scoring, CLI, solvability harness
