@@ -3,10 +3,11 @@
 import type { ArchetypeId, TemplateId } from '../types';
 import type { FailureModeTemplate } from './schema';
 import { T1_VFR_IMC } from './t1-vfr-imc';
-import { T2_FUEL_EXHAUSTION } from './t2-fuel-exhaustion';
+import { T2_FUEL } from './t2-fuel';
+import { T4_ICING } from './t4-icing';
 import { assertValidTemplate } from './validate';
 
-const ALL: FailureModeTemplate[] = [T1_VFR_IMC, T2_FUEL_EXHAUSTION];
+const ALL: FailureModeTemplate[] = [T1_VFR_IMC, T2_FUEL, T4_ICING];
 
 for (const t of ALL) {
   assertValidTemplate(t);

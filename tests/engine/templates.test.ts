@@ -67,6 +67,19 @@ describe('failure-mode templates (P1)', () => {
     assertA1WithoutRecorders(T2_FUEL_EXHAUSTION);
   });
 
+  
+  it('T4 validates: PC, reveal coverage, A2-only icing/MEL', () => {
+    expectValid(T4_ICING);
+    expect(T4_ICING.archetypes).toEqual(['A2']);
+    expect(T4_ICING.nodes.some((n) => n.id === 'latent.mel_misuse')).toBe(true);
+    expect(T4_ICING.nodes.filter((n) => n.tier === 'probableCause').length).toBeGreaterThanOrEqual(
+      1,
+    );
+    for (const node of causalNodes(T4_ICING)) {
+      expect(node.revealedBy.length).toBeGreaterThanOrEqual(2);
+    }
+  });
+
   it('every registered template validates (node counts + reveal coverage)', () => {
     for (const t of listTemplates()) {
       expectValid(t);
