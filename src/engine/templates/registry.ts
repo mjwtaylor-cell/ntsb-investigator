@@ -5,9 +5,15 @@ import type { FailureModeTemplate } from './schema';
 import { T1_VFR_IMC } from './t1-vfr-imc';
 import { T2_FUEL } from './t2-fuel';
 import { T4_ICING } from './t4-icing';
+import { T6_UNCONTAINED_ENGINE } from './t6-uncontained-engine';
 import { assertValidTemplate } from './validate';
 
-const ALL: FailureModeTemplate[] = [T1_VFR_IMC, T2_FUEL, T4_ICING];
+const ALL: FailureModeTemplate[] = [
+  T1_VFR_IMC,
+  T2_FUEL,
+  T4_ICING,
+  T6_UNCONTAINED_ENGINE,
+];
 
 for (const t of ALL) {
   assertValidTemplate(t);

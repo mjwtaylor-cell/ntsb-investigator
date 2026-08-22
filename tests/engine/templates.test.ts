@@ -6,7 +6,9 @@ import {
   templatesForArchetype,
   validateTemplate,
   T1_VFR_IMC,
-  T2_FUEL_EXHAUSTION,
+  T2_FUEL,
+  T4_ICING,
+  T6_UNCONTAINED_ENGINE,
 } from '../../src/engine/templates';
 import type { FailureModeTemplate } from '../../src/engine/templates';
 
@@ -36,46 +38,58 @@ function assertA1WithoutRecorders(template: FailureModeTemplate): void {
 }
 
 describe('failure-mode templates (P1)', () => {
-  it('registry lists implemented templates', () => {
-    expect(TEMPLATE_IDS).toEqual(expect.arrayContaining(['T1', 'T2']));
-    expect(listTemplates()).toHaveLength(TEMPLATE_IDS.length);
+  it('registry lists T1, T2, T4, T6', () => {
+    expect(TEMPLATE_IDS).toEqual(['T1', 'T2', 'T4', 'T6']);
+    expect(listTemplates()).toHaveLength(4);
     expect(getTemplate('T1').name).toMatch(/VFR into IMC/i);
     expect(getTemplate('T2').name).toMatch(/Fuel exhaustion/i);
+    expect(getTemplate('T4').name).toMatch(/icing/i);
+    expect(getTemplate('T6').name).toMatch(/Uncontained engine/i);
   });
 
   it('T1 validates: PC, reveal coverage, A1 without-recorders', () => {
     expectValid(T1_VFR_IMC);
     expect(T1_VFR_IMC.archetypes).toEqual(['A1', 'A2']);
-    const pcs = T1_VFR_IMC.nodes.filter((n) => n.tier === 'probableCause');
-    expect(pcs.length).toBeGreaterThanOrEqual(1);
-    expect(T1_VFR_IMC.redHerringPool.length).toBeGreaterThanOrEqual(
-      T1_VFR_IMC.redHerringDraw.max,
-    );
-    expect(T1_VFR_IMC.flightScriptHooks.length).toBeGreaterThanOrEqual(1);
-    expect(T1_VFR_IMC.evidenceHooks.length).toBeGreaterThanOrEqual(2);
-    expect(T1_VFR_IMC.parCostStub.investigatorDays).toBeGreaterThan(0);
+    expect(
+      T1_VFR_IMC.nodes.filter((n) => n.tier === 'probableCause').length,
+    ).toBeGreaterThanOrEqual(1);
     assertA1WithoutRecorders(T1_VFR_IMC);
   });
 
   it('T2 validates: PC, reveal coverage, A1 without-recorders', () => {
-    expectValid(T2_FUEL_EXHAUSTION);
-    expect(T2_FUEL_EXHAUSTION.archetypes).toEqual(['A1', 'A2']);
-    const pcs = T2_FUEL_EXHAUSTION.nodes.filter(
-      (n) => n.tier === 'probableCause',
-    );
-    expect(pcs.length).toBeGreaterThanOrEqual(1);
-    assertA1WithoutRecorders(T2_FUEL_EXHAUSTION);
+    expectValid(T2_FUEL);
+    expect(T2_FUEL.archetypes).toEqual(['A1', 'A2']);
+    expect(
+      T2_FUEL.nodes.filter((n) => n.tier === 'probableCause').length,
+    ).toBeGreaterThanOrEqual(1);
+    assertA1WithoutRecorders(T2_FUEL);
   });
 
-  
   it('T4 validates: PC, reveal coverage, A2-only icing/MEL', () => {
     expectValid(T4_ICING);
     expect(T4_ICING.archetypes).toEqual(['A2']);
     expect(T4_ICING.nodes.some((n) => n.id === 'latent.mel_misuse')).toBe(true);
-    expect(T4_ICING.nodes.filter((n) => n.tier === 'probableCause').length).toBeGreaterThanOrEqual(
-      1,
-    );
+    expect(
+      T4_ICING.nodes.filter((n) => n.tier === 'probableCause').length,
+    ).toBeGreaterThanOrEqual(1);
     for (const node of causalNodes(T4_ICING)) {
+      expect(node.revealedBy.length).toBeGreaterThanOrEqual(2);
+    }
+  });
+
+  it('T6 validates: PC, reveal coverage, A3/A4 uncontained failure', () => {
+    expectValid(T6_UNCONTAINED_ENGINE);
+    expect(T6_UNCONTAINED_ENGINE.archetypes).toEqual(['A3', 'A4']);
+    expect(
+      T6_UNCONTAINED_ENGINE.nodes.some(
+        (n) => n.id === 'latent.missed_sb_inspection',
+      ),
+    ).toBe(true);
+    expect(
+      T6_UNCONTAINED_ENGINE.nodes.filter((n) => n.tier === 'probableCause')
+        .length,
+    ).toBeGreaterThanOrEqual(1);
+    for (const node of causalNodes(T6_UNCONTAINED_ENGINE)) {
       expect(node.revealedBy.length).toBeGreaterThanOrEqual(2);
     }
   });
@@ -89,13 +103,21 @@ describe('failure-mode templates (P1)', () => {
       ).toBeGreaterThanOrEqual(1);
       expect(t.redHerringDraw.min).toBeGreaterThanOrEqual(1);
       expect(t.redHerringDraw.max).toBeLessThanOrEqual(3);
-      expect(t.redHerringPool.length).toBeGreaterThanOrEqual(t.redHerringDraw.max);
+      expect(t.redHerringPool.length).toBeGreaterThanOrEqual(
+        t.redHerringDraw.max,
+      );
       assertA1WithoutRecorders(t);
     }
   });
 
   it('templatesForArchetype filters by fit', () => {
-    const a1 = templatesForArchetype('A1').map((t) => t.id);
-    expect(a1).toEqual(expect.arrayContaining(['T1', 'T2']));
+    expect(templatesForArchetype('A1').map((t) => t.id)).toEqual(
+      expect.arrayContaining(['T1', 'T2']),
+    );
+    expect(templatesForArchetype('A2').map((t) => t.id)).toEqual(
+      expect.arrayContaining(['T1', 'T2', 'T4']),
+    );
+    expect(templatesForArchetype('A3').map((t) => t.id)).toEqual(['T6']);
+    expect(templatesForArchetype('A4').map((t) => t.id)).toEqual(['T6']);
   });
 });

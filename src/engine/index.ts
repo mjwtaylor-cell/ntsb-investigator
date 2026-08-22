@@ -30,7 +30,9 @@ export {
   validateTemplate,
   assertValidTemplate,
   T1_VFR_IMC,
-  T2_FUEL_EXHAUSTION,
+  T2_FUEL,
+  T4_ICING,
+  T6_UNCONTAINED_ENGINE,
 } from './templates';
 export type {
   FailureModeTemplate,
