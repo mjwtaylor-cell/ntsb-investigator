@@ -13,6 +13,11 @@ import type {
   Par,
 } from '../types';
 import type { FlightTrack } from '../sim';
+import {
+  EXPECTED_GROUPS_FOR_PAR,
+  GROUP_DAILY_BURN,
+  PAR_EVIDENCE_MULT,
+} from '../actions/reducer';
 import { buildRecorderItems } from './recorders';
 import { buildRadarItems } from './radar';
 import { buildWeatherItems } from './weather';
@@ -157,12 +162,12 @@ function recoveryStubs(archetype: Archetype): EvidenceItem[] {
 export function buildPar(
   template: FailureModeTemplate,
   catalogue: EvidenceCatalogue,
-  difficulty: 'standard' | 'senior',
+  _difficulty: 'standard' | 'senior',
 ): Par {
   const set = template.parCostStub.evidenceSet.filter((id) =>
     catalogue.some((e) => e.id === id),
   );
-  // Fall back to cheapest without-recorder items if filtered empty
+  // Fall back to cheapest no-prereq items if filtered empty
   const evidenceSet =
     set.length > 0
       ? set
@@ -172,13 +177,26 @@ export function buildPar(
           .slice(0, 5)
           .map((e) => e.id);
 
-  const stubDays = template.parCostStub.investigatorDays;
-  const stubCal = template.parCostStub.calendarDays;
-  const mult = difficulty === 'senior' ? 1.1 : 1.6;
+  const evidenceCostSum = evidenceSet.reduce((sum, id) => {
+    const item = catalogue.find((e) => e.id === id);
+    return sum + (item?.cost ?? 0);
+  }, 0);
+
+  const calendarDays = template.parCostStub.calendarDays;
+  const expectedBurnPerDay = EXPECTED_GROUPS_FOR_PAR * GROUP_DAILY_BURN;
+  const groupBurn = expectedBurnPerDay * calendarDays;
+  // B2.7: par = Σ(min evidence costs)×1.6 + expected group burn over par calendar.
+  // Same ×1.6 for Standard and Senior; difficulty only changes starting budget.
+  const investigatorDays = Math.ceil(
+    evidenceCostSum * PAR_EVIDENCE_MULT + groupBurn,
+  );
+
   return {
-    investigatorDays: Math.ceil(stubDays * mult),
-    calendarDays: stubCal,
+    investigatorDays,
+    calendarDays,
     evidenceSet,
+    expectedBurnPerDay,
+    evidenceCostSum,
   };
 }
 

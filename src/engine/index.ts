@@ -57,6 +57,9 @@ export { buildEvidence } from './evidence';
 export {
   createInitialState,
   buildPressureEvents,
+  GROUP_DAILY_BURN,
+  EXPECTED_GROUPS_FOR_PAR,
+  PAR_EVIDENCE_MULT,
   type ReduceContext,
   type PressureEvent,
 } from './actions';

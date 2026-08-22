@@ -13,7 +13,14 @@ import {
   type PressureEvent,
 } from './pressure';
 
-const GROUP_DAILY_BURN = 0.35;
+/** Investigator-days burned per active group per calendar day. */
+export const GROUP_DAILY_BURN = 0.35;
+
+/** Groups assumed when folding burn into par (B2.7 sanity: 5-group case). */
+export const EXPECTED_GROUPS_FOR_PAR = 5;
+
+/** Evidence-cost multiplier baked into par (same for Standard and Senior). */
+export const PAR_EVIDENCE_MULT = 1.6;
 
 export interface ReduceContext {
   bundle: CaseBundle;

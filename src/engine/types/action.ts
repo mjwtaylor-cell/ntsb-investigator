@@ -76,12 +76,17 @@ export interface CaseState {
   submitted: boolean;
 }
 
-/** Par budget derived from the minimum sufficient evidence set (B2.7). */
+/** Par derived from the minimum sufficient evidence set (B2.7). */
 export interface Par {
+  /** Σ(min-evidence costs)×1.6 + expected group burn over calendar length. */
   investigatorDays: number;
   calendarDays: number;
   /** Evidence ids in the minimum sufficient set. */
   evidenceSet: string[];
+  /** Expected group burn rate baked into par (inv-days / calendar day). */
+  expectedBurnPerDay: number;
+  /** Sum of catalogue costs for evidenceSet before the ×1.6 multiplier. */
+  evidenceCostSum: number;
 }
 
 /** Score breakdown after board submission (B2.9). */

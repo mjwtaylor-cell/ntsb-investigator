@@ -134,6 +134,8 @@ function samplePar(): Par {
     investigatorDays: 40,
     calendarDays: 120,
     evidenceSet: ['records.mel_list', 'recorders.cvr'],
+    expectedBurnPerDay: 1.75,
+    evidenceCostSum: 10,
   };
 }
 
