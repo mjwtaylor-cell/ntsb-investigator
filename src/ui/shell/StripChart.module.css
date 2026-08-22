@@ -1,0 +1,21 @@
+.chart {
+  background: var(--ink-800);
+  border: var(--hair);
+  border-radius: var(--radius);
+  padding: 12px 14px 10px;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.header { display: flex; justify-content: space-between; align-items: baseline; }
+.eyebrow {
+  font-family: var(--font-display); font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; font-size: 11px; color: var(--ink-300); margin: 0;
+}
+.cursorReadout {
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+  font-size: 11px; color: var(--orange-300);
+}
+.svgWrap { flex: 1; min-height: 280px; }
+.svg { width: 100%; height: 100%; display: block; }

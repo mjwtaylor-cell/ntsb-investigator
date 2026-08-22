@@ -1,0 +1,17 @@
+:root {
+  --ink-950:#0B0F14; --ink-900:#0F151C; --ink-800:#161E27; --ink-700:#1F2A36; --ink-600:#2B3847;
+  --ink-300:#8A97A6; --ink-100:#E6EBF0;
+  --paper-50:#F4F0E7; --paper-100:#EAE4D7; --paper-ink:#1C2128; --paper-rule:#CFC7B6;
+  --orange-500:#F2561D; --orange-300:#FF8C5A;
+  --blue-400:#4C8DDB;
+  --ok:#3FA66B; --warn:#E0A32E; --crit:#D64545;
+  --series-1:#5FB3C9; --series-2:#E0A32E; --series-3:#8FD694; --series-4:#FF8C5A;
+  --radius:3px; --hair:1px solid var(--ink-600);
+  --font-display:"IBM Plex Sans Condensed", sans-serif;
+  --font-ui:"IBM Plex Sans", sans-serif;
+  --font-mono:"IBM Plex Mono", monospace;
+  --font-doc:"Source Serif 4", serif;
+  --topbar-h:56px;
+  --left-rail-w:260px;
+  --right-rail-w:340px;
+}

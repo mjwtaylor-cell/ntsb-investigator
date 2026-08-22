@@ -1,0 +1,14 @@
+# AGENTS.md — NTSB Investigator operating rules
+
+1. **Workspace.** `/workspace/ntsb-investigator` only. Start every session: `git pull`, `npm ci`, `npm test`, read `docs/STATUS.md` and the current phase in `docs/BUILD_PLAN.md`. Never re-read the whole repo to re-orient — STATUS.md is the orientation.
+2. **Phase discipline.** One phase per session. A phase ends only when its acceptance list is green. Then: commit, push, wait for CI + Pages, open the live URL in your browser, take the screenshots, update `docs/STATUS.md`, append `docs/DECISIONS.md`, post the checkpoint report (B5 template), stop and wait for GO.
+3. **Commits.** Small, frequent, Conventional Commits (`feat(engine): …`). Push at least every 60–90 minutes of work, and always at phase end. `main` is the deploy branch; no force-push.
+4. **Decide, don't ask.** Anything a senior engineer would decide, decide; log it in `DECISIONS.md` (date, decision, why). Ask only at a phase boundary, or when an action touches money, accounts, or publishing beyond the repo + Pages.
+5. **Determinism.** All randomness through the seeded RNG with named streams (`rng.fork('weather')`). Same seed → identical case JSON (hash-tested). Curated case files store their full generated snapshot so engine changes never alter them.
+6. **Boundaries.** `src/engine/**` imports nothing from the DOM, React, or `window`. No file over 400 lines; split by responsibility. No runtime network calls, no runtime LLM calls, no analytics.
+7. **Quality gates (every phase).** ESLint + Prettier clean; `npm test` green; `npm run build` clean; no console errors on the live URL; Lighthouse desktop ≥ 85 performance / ≥ 90 accessibility on the case view; keyboard-operable; `prefers-reduced-motion` respected.
+8. **Visual verification.** Open the running app in *your own browser* (localhost dev server or the Pages URL) and look before you report. Screenshots: 1440×900 of each new view, plus one 390×844 of the shell. Compare against the design tokens in B2.12 — wrong fonts, off-palette colours, or misaligned grids are bugs.
+9. **Failure budget.** If a tool or install fails 3 times (e.g. Playwright system deps on the cloud computer), switch to the named fallback (B7) and note it. Don't burn usage looping on flaky tooling.
+10. **Assets.** Never regenerate images. Every generated image is committed with its prompt in `src/assets/images/manifest.json`. Fonts self-hosted via `@fontsource`.
+11. **Content rules.** Fictional aircraft types, operators, airports (fictional names in real US states are fine), crews, witnesses. Never model a specific real accident; use failure-mode *categories* from public NTSB patterns. Include the disclaimer from B2.15 in the app footer.
+12. **Reporting honesty.** Separate in every report: facts verified (tests, screenshots), assumptions/inferences, actions completed, actions waiting for approval, unresolved questions. Never claim a check you didn't run.
