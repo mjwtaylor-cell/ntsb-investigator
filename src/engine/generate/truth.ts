@@ -35,8 +35,9 @@ function drawRedHerrings(
 function filterRevealsForArchetype(
   nodes: CausalNode[],
   archetype: Archetype,
-  _template: FailureModeTemplate,
+  template: FailureModeTemplate,
 ): CausalNode[] {
+  void template;
   const hasFdr = archetype.recorders.fdr !== 'none';
   const hasCvr = archetype.recorders.cvr;
   const hasEngineNvm = archetype.recorders.engineMonitorNvm;

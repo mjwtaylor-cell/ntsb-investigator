@@ -162,8 +162,9 @@ function recoveryStubs(archetype: Archetype): EvidenceItem[] {
 export function buildPar(
   template: FailureModeTemplate,
   catalogue: EvidenceCatalogue,
-  _difficulty: 'standard' | 'senior',
+  difficulty: 'standard' | 'senior',
 ): Par {
+  void difficulty; // Par formula is difficulty-agnostic; budget applies the mult.
   const set = template.parCostStub.evidenceSet.filter((id) =>
     catalogue.some((e) => e.id === id),
   );

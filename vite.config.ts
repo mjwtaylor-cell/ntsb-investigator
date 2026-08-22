@@ -7,5 +7,11 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: false,
+    coverage: {
+      provider: 'v8',
+      include: ['src/engine/**'],
+      reporter: ['text', 'json-summary'],
+      reportsDirectory: './coverage',
+    },
   },
 });
