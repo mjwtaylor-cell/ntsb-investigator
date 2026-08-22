@@ -1,5 +1,3 @@
-/** Engine public API (TECH.md). */
-
 export type * from './types';
 export { NODE_TIER_WEIGHT } from './types';
 export { createRng, hashSeed, type Rng } from './rng';
@@ -51,11 +49,8 @@ export { generateWorld, generateTruth, type GenerateOpts } from './generate';
 export { simulateFlight, type FlightTrack, type FlightSample } from './sim';
 export { buildEvidence } from './evidence';
 export {
-  applyAction as reduceAction,
-  advanceTime as reduceAdvanceTime,
   createInitialState,
   buildPressureEvents,
-  resetQueueSeq,
   type ReduceContext,
   type PressureEvent,
 } from './actions';
@@ -65,37 +60,42 @@ export {
   emptyFindings,
   runOracles,
   type FindingsInput,
+  type OracleResult,
 } from './scoring';
 
-import type {
-  Action,
-  CaseBundle,
-  CaseState,
-  ScoreReport,
-} from './types';
 import { generateWorld, generateTruth, type GenerateOpts } from './generate';
 import { simulateFlight, type FlightTrack } from './sim';
 import { buildEvidence } from './evidence';
 import {
   applyAction as reduceAction,
   advanceTime as reduceAdvanceTime,
+  createInitialState,
   buildPressureEvents,
   resetQueueSeq,
-  type ReduceContext,
   type PressureEvent,
 } from './actions';
 import { scoreCase, type FindingsInput } from './scoring';
+import type {
+  Action,
+  CaseBundle,
+  CaseState,
+  PlayerFinding,
+  ScoreReport,
+} from './types';
 
-export interface GenerateCaseResult extends CaseBundle {
+/** Full generated case: TECH CaseBundle plus flight track + pressure. */
+export interface GeneratedCase extends CaseBundle {
   flight: FlightTrack;
   pressureEvents: PressureEvent[];
 }
 
-/** Seed → full case bundle (world, truth, evidence, par) + flight/pressure. */
+export type GenerateCaseOpts = GenerateOpts;
+
+/** seed → world → truth → flight → evidence catalogue → par. */
 export function generateCase(
   seed: string,
-  opts: GenerateOpts = {},
-): GenerateCaseResult {
+  opts: GenerateCaseOpts = {},
+): GeneratedCase {
   resetQueueSeq();
   const { world, archetype, difficulty } = generateWorld(seed, opts);
   const { truth, template } = generateTruth(seed, archetype, difficulty, opts);
@@ -116,13 +116,11 @@ export function applyAction(
   state: CaseState,
   action: Action,
   bundle: CaseBundle,
-  pressureEvents?: PressureEvent[],
 ): CaseState {
-  const ctx: ReduceContext = {
-    bundle,
-    pressureEvents: pressureEvents ?? buildPressureEvents(state.seed),
-  };
-  return reduceAction(state, action, ctx);
+  const pressureEvents =
+    (bundle as GeneratedCase).pressureEvents ??
+    buildPressureEvents(bundle.truth.seed);
+  return reduceAction(state, action, { bundle, pressureEvents });
 }
 
 export function advanceTime(
@@ -133,10 +131,25 @@ export function advanceTime(
   return reduceAdvanceTime(state, days, bundle);
 }
 
+/**
+ * Score findings against truth.
+ * Accepts either FindingsInput or a CaseState that already holds findings.
+ */
 export function score(
-  findings: FindingsInput,
+  findingsOrState: FindingsInput | CaseState,
   bundle: CaseBundle,
-  state: CaseState,
+  state?: CaseState,
 ): ScoreReport {
-  return scoreCase(findings, bundle, state);
+  if (state) {
+    return scoreCase(findingsOrState as FindingsInput, bundle, state);
+  }
+  const s = findingsOrState as CaseState;
+  const input: FindingsInput = {
+    findings: s.findings,
+    findingEdges: s.findingEdges,
+    recommendations: s.recommendations,
+  };
+  return scoreCase(input, bundle, s);
 }
+
+export type { PlayerFinding };
