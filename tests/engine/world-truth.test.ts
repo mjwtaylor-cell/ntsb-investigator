@@ -71,4 +71,25 @@ describe('world + truth generation', () => {
       resolveSelection('bad', { archetype: 'A1', template: 'T6' }),
     ).toThrow(CaseSelectionError);
   });
+
+  it('operator pools follow ops part and avoid aircraft-family names', () => {
+    const banned = [/meridian/i, /kestrel/i, /aurora/i, /halcyon/i];
+    for (const id of ['A1', 'A2', 'A3', 'A4'] as const) {
+      const { world, archetype } = generateWorld(`op-${id}`, { archetype: id });
+      expect(world.operator.opsPart).toBe(archetype.opsPart);
+      for (const re of banned) {
+        expect(world.operator.name).not.toMatch(re);
+      }
+      expect(world.occupants.minorInjuries).toBeGreaterThanOrEqual(0);
+      const total =
+        world.occupants.crewFlight +
+        world.occupants.crewCabin +
+        world.occupants.passengers;
+      expect(
+        world.occupants.fatalities +
+          world.occupants.seriousInjuries +
+          world.occupants.minorInjuries,
+      ).toBeLessThanOrEqual(total);
+    }
+  });
 });

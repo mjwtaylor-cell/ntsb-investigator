@@ -28,16 +28,30 @@ export interface WorldGenResult {
   difficulty: Difficulty;
 }
 
-const OPERATOR_NAMES = [
-  'Pinewood Air',
-  'Cascade Charter',
-  'Northern Feather Lines',
-  'Halcyon Regional',
-  'Meridian Flight Club',
-  'Kestrel Commuter',
-  'Aurora Link',
-  'High Plains Hop',
-] as const;
+/** Operator name pools by ops part — never reuse aircraft-family names. */
+const OPERATORS_BY_PART: Readonly<Record<'91' | '135' | '121', readonly string[]>> = {
+  '91': [
+    'Pinewood Flying Club',
+    'Cedar Ridge Private',
+    'High Plains Personal Aviation',
+    'Lakeshore Owners Group',
+    'Sugar Ridge Flying Circle',
+  ],
+  '135': [
+    'Cascade Charter',
+    'Northern Feather Lines',
+    'Prairie Hopper Air Taxi',
+    'Burnside Commuter Service',
+    'Fairfield On-Demand Air',
+  ],
+  '121': [
+    'Continental Feeder Airways',
+    'Prairie Link Airlines',
+    'Summit Regional Air',
+    'Gulfboard Mainline',
+    'Northfork Scheduled Service',
+  ],
+};
 
 const CREW_FIRST = [
   'Jordan',
@@ -124,9 +138,10 @@ const AIRPORTS: ReadonlyArray<{
 ];
 
 function buildOperator(arch: Archetype, rng: Rng): OperatorProfile {
+  const pool = OPERATORS_BY_PART[arch.opsPart];
   return {
     id: `op.${rng.nextInt(1000, 9999)}`,
-    name: rng.pick(OPERATOR_NAMES),
+    name: rng.pick(pool),
     opsPart: arch.opsPart,
     sopQuality: 0.35 + rng.next() * 0.55,
     schedulePressure: 0.2 + rng.next() * 0.7,
@@ -228,13 +243,17 @@ function buildOccupants(
   const passengers = rng.nextInt(0, paxMax);
   const total = arch.crewFlight + arch.crewCabin + passengers;
   const fatalities = rng.nextInt(Math.ceil(total * 0.3), total);
-  const seriousInjuries = Math.min(total - fatalities, rng.nextInt(0, 4));
+  const remaining = total - fatalities;
+  const seriousInjuries = Math.min(remaining, rng.nextInt(0, Math.max(0, remaining)));
+  const afterSerious = remaining - seriousInjuries;
+  const minorInjuries = Math.min(afterSerious, rng.nextInt(0, Math.max(0, afterSerious)));
   return {
     crewFlight: arch.crewFlight,
     crewCabin: arch.crewCabin,
     passengers,
     fatalities,
     seriousInjuries,
+    minorInjuries,
   };
 }
 

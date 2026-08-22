@@ -73,5 +73,6 @@ export interface World {
     passengers: number;
     fatalities: number;
     seriousInjuries: number;
+    minorInjuries: number;
   };
 }

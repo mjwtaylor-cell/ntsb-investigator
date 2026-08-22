@@ -80,10 +80,8 @@ function main(): void {
     .map((n) => `  [${n.tier}] ${n.id}: ${n.text.slice(0, 90)}`)
     .join('\n');
 
-  const crewN =
-    bundle.world.occupants.crewFlight + bundle.world.occupants.crewCabin;
   const occ = bundle.world.occupants;
-  const minor = 'minorInjuries' in occ ? (occ as { minorInjuries: number }).minorInjuries : 0;
+  const crewN = occ.crewFlight + occ.crewCabin;
 
   const summary = [
     `NTSB Investigator — case seed ${args.seed}`,
@@ -92,7 +90,7 @@ function main(): void {
     `Difficulty: ${bundle.truth.difficulty}`,
     `Location:  ${bundle.world.environment.airportName}, ${bundle.world.environment.state} (${bundle.world.environment.timeOfDay})`,
     `Operator:  ${bundle.world.operator.name}`,
-    `Occupants: ${occ.passengers} pax + ${crewN} crew · fatal ${occ.fatalities} · serious ${occ.seriousInjuries} · minor ${minor}`,
+    `Occupants: ${occ.passengers} pax + ${crewN} crew · fatal ${occ.fatalities} · serious ${occ.seriousInjuries} · minor ${occ.minorInjuries}`,
     `Flight:    ${bundle.flight.samples.length} samples @ 1 Hz; events: ${bundle.flight.events.map((e) => e.eventId).join(', ') || '(none)'}`,
     `Evidence:  ${bundle.evidence.length} catalogue items`,
     `Par:       ${bundle.par.investigatorDays} inv-days over ${bundle.par.calendarDays} calendar days`,

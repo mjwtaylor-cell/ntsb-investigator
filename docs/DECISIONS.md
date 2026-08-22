@@ -52,3 +52,10 @@ precondition, and crew/dispatch nodes are contributing unless listed in the PC
 set. Outcome nodes remain on the truth graph for narrative/wreckage linkage but
 are excluded from coverage, claimable findings, and solvability reveal checks.
 Oracles re-run green (truth 98 / empty 10 on seed 1174). Golden hash regenerated.
+
+## 22 Aug 2026 — P1.5 operator pools by ops part
+
+Operator names are drawn from Part 91 / 135 / 121 pools and never reuse
+aircraft-family names (Meridian, Kestrel, Aurora, Halcyon). Occupants now
+track minor injuries; CLI prints `N pax + N crew · fatal N · serious N · minor N`.
+Golden hash regenerated after world shape change.

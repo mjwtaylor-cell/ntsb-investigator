@@ -114,6 +114,7 @@ function sampleWorld(): World {
       passengers: 11,
       fatalities: 9,
       seriousInjuries: 2,
+      minorInjuries: 0,
     },
   };
 }
