@@ -1,6 +1,6 @@
 # STATUS.md
 
-**Phase:** P1 Engine — in progress (session 1)
+**Phase:** P1 Engine core — in progress (B4 done)
 **Updated:** 22 Aug 2026 (America/Chicago)
 
 ## Current state
@@ -13,21 +13,19 @@
 - Vite + React + TypeScript scaffold with ESLint, Prettier, Vitest.
 - Design tokens at `src/ui/styles/tokens.css` (B2.12).
 - Docket placeholder UI: top bar 56px, left rail 260px, paper document, SVG strip chart, right rail 340px findings board.
-- Engine and `case` CLI stubs print "engine not yet implemented".
+- Engine: seeded RNG with named forks; archetypes A1–A4; engine types stubs. Templates / world / sim / evidence / scoring / CLI / solvability still ahead.
 - GitHub workflows: `ci.yml`, `pages.yml` (base `/ntsb-investigator/`).
-- Unit tests and production build green; CI and Pages deploy green.
 - Screenshots in `docs/screenshots/`:
   - `docket-desktop-1440.png`
   - `docket-narrow-390.png`
   - `p0-docket-live.webp`
-- Note: right rail clips at ~1280px viewport width (logged as P2; do not fix in P1).
 
-## P1 session 1 (this session)
+## B4 — done
 
-- **B4 domain read first** (time-boxed): process page, Major Investigations Manual (report-format + group-responsibility sections + Apps B/H/K), Party Guidance; three CAROL reports for tone only.
-- Expanded `docs/DOMAIN.md` → **Conventions used by the engine** (FDR keys, CVR notation, PC/findings/recs style, wreckage vocab, radar timing, groups, Annex 13 map).
-- Logged P2 UI issues in `docs/DECISIONS.md`.
-- **Not started yet:** accident templates / engine generate path (deferred until after B4).
+- `docs/DOMAIN.md` includes **Conventions used by the engine** (FDR keys, CVR notation, PC/findings/recs, wreckage vocab, radar/ADS-B timing, investigative groups, Annex 13 → docket map).
+- Manual: §§3.6, 4.4, 4.6, 4.12–4.13; Apps B, H, K, M.
+- Reports (tone only): AAR-09/01/SUM, AAR-16/03, AAR-10/01.
+- P2 UI issues logged in `docs/DECISIONS.md` — do not fix in P1.
 
 ## Verified
 
@@ -35,6 +33,7 @@
 - Lint / test / build pass after scaffold
 - CI green; Pages green on live URL above
 
-## Next
+## Next (P1)
 
-- Engine core after B4: rng, types, archetypes, templates, world/truth, sim, evidence, scoring, CLI, solvability harness
+- Do not start templates until DOMAIN conventions are present (done)
+- Engine: world/truth, sim, evidence, scoring, CLI, solvability harness

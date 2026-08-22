@@ -17,6 +17,13 @@ GitHub owner / account is `mjwtaylor-cell`. Repo: https://github.com/mjwtaylor-c
 - Right rail must collapse to a tab at 900–1200; shell single-column under 900 per B2.11
 - FDR strips must fill their panel
 
-## 22 Aug 2026 — B4 domain read (P1 session 1); conventions logged, no templates yet
+## 22 Aug 2026 — B4 domain read; conventions logged, no templates yet
 
-Read before any accident templates: NTSB investigative process page; Major Investigations Manual §§3.6 (Group Chairmen Responsibilities), 4.4 (Group Chairman Factual/Studies/Analysis Reports), 4.6 (Public Docket), 4.10–4.13 (Party Submissions through Board Meeting), plus App B (CVR Handbook), App H (Group Chairmen Checklists), App K (Factual/Analysis Report Outlines); Party Guidance PDF. CAROL tone skim (structure/phrasing only — no case facts into DOMAIN or templates): **ANC22LA034** (small GA / Class 4), **ERA23FA001** (medium / Class 3), **AAR-20/02** (major Part 121 blue-cover). Expanded `docs/DOMAIN.md` with **Conventions used by the engine**.
+Read before any accident templates (patterns only — no case facts into DOMAIN or templates):
+
+- Process page: https://www.ntsb.gov/investigations/process/Pages/default.aspx
+- Major Investigations Manual sections: **§3.6** Group Chairmen Responsibilities; **§4.4** Group Chairman Factual, Studies, and Analysis Reports; **§4.6** The Public Docket; **§4.12** final-report drafting (Annex 13); **§4.13** Board Meeting
+- Appendixes: **App B** CVR Handbook; **App H** Group Chairmen Checklists; **App K** Factual/Analysis Report Outlines; **App M** hearing exhibit order
+- Public reports skimmed (structure/tone only): **NTSB/AAR-09/01/SUM** (small GA); **NTSB/AAR-16/03** (medium Part 135); **NTSB/AAR-10/01** (large Part 121)
+
+Expanded `docs/DOMAIN.md` with **Conventions used by the engine**.
