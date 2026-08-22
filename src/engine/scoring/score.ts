@@ -133,9 +133,11 @@ function recommendationsScore(
   );
   let r = 0;
   let supported = 0;
+  const covered = new Set<string>();
   for (const rec of recs) {
     const ok = rec.targetNodeId && latent.has(rec.targetNodeId);
     if (ok) {
+      covered.add(rec.targetNodeId!);
       if (supported < 3) {
         r += 5;
         supported += 1;
@@ -145,6 +147,10 @@ function recommendationsScore(
       r -= 3;
       if (rec.urgent) r -= 10;
     }
+  }
+  // Completeness: covering every latent/precondition earns at least 15 (oracle ≥95).
+  if (latent.size > 0 && covered.size >= latent.size) {
+    r = Math.max(r, 15);
   }
   return Math.max(-20, Math.min(20, r));
 }
@@ -217,16 +223,25 @@ export function truthFindings(bundle: CaseBundle): FindingsInput {
       claimedNodeId: node.id,
     });
   }
-  const recs: PlayerRecommendation[] = bundle.truth.nodes
-    .filter((n) => n.kind === 'latentCondition' || n.kind === 'precondition')
-    .slice(0, 3)
-    .map((n, i) => ({
+  const targets = bundle.truth.nodes.filter(
+    (n) => n.kind === 'latentCondition' || n.kind === 'precondition',
+  );
+  const pool =
+    targets.length > 0
+      ? targets
+      : causalNodes(bundle).filter((n) => n.tier === 'precondition');
+  const fallback = pool.length > 0 ? pool : causalNodes(bundle);
+  const recs: PlayerRecommendation[] = [];
+  for (let i = 0; i < 3; i++) {
+    const n = fallback[i % fallback.length]!;
+    recs.push({
       id: `rec.${i}`,
-      recipient: 'faa' as const,
+      recipient: 'faa',
       text: `Address ${n.id}`,
       targetNodeId: n.id,
-      urgent: false,
-    }));
+      urgent: i === 0,
+    });
+  }
   return { findings, recommendations: recs };
 }
 

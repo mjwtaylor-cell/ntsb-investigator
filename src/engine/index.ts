@@ -69,7 +69,6 @@ import { buildEvidence } from './evidence';
 import {
   applyAction as reduceAction,
   advanceTime as reduceAdvanceTime,
-  createInitialState,
   buildPressureEvents,
   resetQueueSeq,
   type PressureEvent,

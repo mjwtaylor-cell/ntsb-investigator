@@ -233,7 +233,7 @@ function buildEnvironment(rng: Rng, wxRng: Rng): Environment {
 
 function buildOccupants(
   arch: Archetype,
-  crew: CrewMember[],
+  _crew: CrewMember[],
   rng: Rng,
 ): World['occupants'] {
   const paxMax = Math.max(0, arch.seats - arch.crewFlight - arch.crewCabin);
