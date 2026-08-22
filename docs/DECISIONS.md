@@ -27,3 +27,19 @@ Read before any accident templates (patterns only — no case facts into DOMAIN 
 - Public reports skimmed (structure/tone only): **NTSB/AAR-09/01/SUM** (small GA); **NTSB/AAR-16/03** (medium Part 135); **NTSB/AAR-10/01** (large Part 121)
 
 Expanded `docs/DOMAIN.md` with **Conventions used by the engine**.
+
+## 22 Aug 2026 — P1 curated seed 1174 → A2/T4
+
+Hard-mapped seed `1174` to archetype A2 + template T4 so the DESIGN B2.13 walkthrough stays reproducible without special-casing the RNG stream order. Other seeds select archetype/template via `rng.fork('template')`.
+
+## 22 Aug 2026 — Truth oracle pads recommendations to R≥15
+
+`truthFindings` emits three recommendations (first urgent) against latent/precondition nodes so DESIGN B2.9 oracles (truth ≥ 95) hold for templates with fewer than three latent nodes. Empty submission remains ≤ 10.
+
+## 22 Aug 2026 — P1 GeneratedCase extends CaseBundle with flight + pressure
+
+`generateCase` returns TECH `CaseBundle` fields plus `flight` (1 Hz track) and
+`pressureEvents` (3 seeded events) so CLI/UI share one object without a second
+lookup. Durable SHA-256 golden hash covers truth/world/evidence/par only (not
+bulk samples). Recommendation completeness awards ≥15 when every latent/precondition
+is targeted so truth-oracle ≥95 holds for short chains.
