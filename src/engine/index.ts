@@ -30,6 +30,7 @@ export {
   validateTemplate,
   assertValidTemplate,
   T1_VFR_IMC,
+  T2_FUEL,
 } from './templates';
 export type {
   FailureModeTemplate,

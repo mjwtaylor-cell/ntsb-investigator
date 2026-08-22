@@ -6,6 +6,7 @@ import {
   templatesForArchetype,
   validateTemplate,
   T1_VFR_IMC,
+  T2_FUEL,
 } from '../../src/engine/templates';
 import type { FailureModeTemplate } from '../../src/engine/templates';
 
@@ -51,6 +52,23 @@ describe('failure-mode templates (P1)', () => {
     }
   });
 
+  
+  it('T2 validates: PC, reveal coverage, A1 without-recorders', () => {
+    expectValid(T2_FUEL);
+    expect(T2_FUEL.archetypes).toEqual(['A1', 'A2']);
+    expect(T2_FUEL.nodes.filter((n) => n.tier === 'probableCause').length).toBeGreaterThanOrEqual(
+      1,
+    );
+    const hooks = new Map(T2_FUEL.evidenceHooks.map((h) => [h.evidenceId, h]));
+    for (const node of causalNodes(T2_FUEL)) {
+      expect(node.revealedBy.length).toBeGreaterThanOrEqual(2);
+      expect(
+        node.revealedBy.some((l) => hooks.get(l.evidenceId)?.withoutRecorders),
+        node.id,
+      ).toBe(true);
+    }
+  });
+
   it('every registered template validates (node counts + reveal coverage)', () => {
     for (const t of listTemplates()) {
       expectValid(t);
@@ -67,5 +85,6 @@ describe('failure-mode templates (P1)', () => {
   it('templatesForArchetype filters by fit', () => {
     const a1 = templatesForArchetype('A1').map((t) => t.id);
     expect(a1).toContain('T1');
+    expect(a1).toContain('T2');
   });
 });
