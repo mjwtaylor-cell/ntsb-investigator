@@ -46,7 +46,8 @@ function useQueryBootstrap() {
 
 function unlockDemoCase() {
   const store = useCaseStore.getState();
-  let { bundle, state } = store;
+  const { bundle } = store;
+  let { state } = store;
   if (!bundle || !state) return;
 
   const groups = new Set(bundle.evidence.map((e) => e.group));

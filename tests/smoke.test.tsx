@@ -18,7 +18,7 @@ describe('Docket UI', () => {
       error: null,
       budgetTotal: 0,
     });
-    localStorage.clear();
+    window.localStorage.clear();
   });
 
   afterEach(() => {
