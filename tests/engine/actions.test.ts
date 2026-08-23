@@ -70,6 +70,28 @@ describe('actions reducer / queue / decay / pressure', () => {
       ctx,
     );
     expect(state.pressureResolvedIds).toContain(event.id);
-    expect(ctx.pressureEvents).toHaveLength(3);
+    expect(ctx.pressureEvents).toHaveLength(6);
+  });
+
+  it('conductInterview appends transcript evidence', () => {
+    const { bundle, ctx } = bundleFor('1174');
+    let state = createInitialState(bundle);
+    state = applyAction(state, { type: 'standUpGroup', group: 'operations' }, ctx);
+    state = applyAction(
+      state,
+      { type: 'requestEvidence', evidenceId: 'ops.dispatcher_interview' },
+      ctx,
+    );
+    const item = bundle.evidence.find((e) => e.id === 'ops.dispatcher_interview')!;
+    state = advanceTime(state, item.leadTime, bundle);
+    expect(state.obtainedEvidenceIds).toContain('ops.dispatcher_interview');
+    state = applyAction(
+      state,
+      { type: 'conductInterview', subjectId: 'dispatcher', topicId: 'release_weather' },
+      ctx,
+    );
+    expect(
+      state.obtainedEvidenceIds.some((id) => id.startsWith('interview.dispatcher.')),
+    ).toBe(true);
   });
 });

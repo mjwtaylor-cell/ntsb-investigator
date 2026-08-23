@@ -12,6 +12,7 @@ import {
   applyPressureResponse,
   type PressureEvent,
 } from './pressure';
+import { conductInterview } from '../interviews';
 
 /** Investigator-days burned per active group per calendar day. */
 export const GROUP_DAILY_BURN = 0.35;
@@ -142,9 +143,21 @@ export function applyAction(
       };
     }
     case 'issueUrgentRec': {
+      const target = action.recommendation.targetNodeId;
+      const node = target
+        ? bundle.truth.nodes.find((n) => n.id === target)
+        : undefined;
+      const correct =
+        !!node &&
+        (node.kind === 'latentCondition' || node.kind === 'precondition');
+      const delta = correct ? 5 : target ? -10 : -2;
       return {
         ...state,
         recommendations: [...state.recommendations, action.recommendation],
+        publicConfidence: Math.max(
+          0,
+          Math.min(100, state.publicConfidence + delta),
+        ),
         actionLog: [...state.actionLog, action],
       };
     }
@@ -184,6 +197,9 @@ export function applyAction(
         findingEdges: [...state.findingEdges, edge],
         actionLog: [...state.actionLog, action],
       };
+    }
+    case 'conductInterview': {
+      return conductInterview(state, action.subjectId as never, action.topicId).state;
     }
     case 'respondPressure':
       return applyPressureResponse(

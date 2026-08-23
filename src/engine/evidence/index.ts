@@ -11,3 +11,4 @@ export { buildWreckageItems } from './wreckage';
 export { buildRecordsItems } from './records';
 export { buildWitnessItems, witnessStatements } from './witnesses';
 export { buildPartyItems } from './parties';
+export { buildLabItems } from './lab';

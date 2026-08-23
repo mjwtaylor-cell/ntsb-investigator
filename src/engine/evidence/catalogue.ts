@@ -25,6 +25,8 @@ import { buildWreckageItems } from './wreckage';
 import { buildRecordsItems } from './records';
 import { buildWitnessItems } from './witnesses';
 import { buildPartyItems } from './parties';
+import { buildLabItems } from './lab';
+import { buildInterviewCatalogueItems } from '../interviews';
 
 function decayFor(id: string): number | undefined {
   if (id.startsWith('wx.')) return 30;
@@ -225,6 +227,7 @@ export function buildEvidence(
     ...buildRecordsItems(truth),
     ...buildWitnessItems(truth, track),
     ...buildPartyItems(),
+    ...buildLabItems(),
   ];
 
   const byId = new Map<string, EvidenceItem>();
@@ -252,6 +255,12 @@ export function buildEvidence(
         { nodeId: node.id, strength: link.strength },
       ]);
     }
+  }
+
+  for (const item of buildInterviewCatalogueItems()) {
+    if (!item.prereqs.every((pre) => byId.has(pre))) continue;
+    if (byId.has(item.id)) continue;
+    byId.set(item.id, item);
   }
 
   const catalogue = Array.from(byId.values()).sort((a, b) =>

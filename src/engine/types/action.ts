@@ -37,6 +37,7 @@ export type Action =
   | { type: 'removeFinding'; findingId: string }
   | { type: 'linkFindings'; fromFindingId: string; toFindingId: string }
   | { type: 'respondPressure'; eventId: string; choiceId: string }
+  | { type: 'conductInterview'; subjectId: string; topicId: string }
   | { type: 'submitReport' };
 
 export interface QueuedWork {

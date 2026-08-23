@@ -10,6 +10,16 @@ export function buildRadarItems(
 ): EvidenceItem[] {
   const items: EvidenceItem[] = [
     {
+      id: 'atc.tower_transcript',
+      group: 'atc',
+      title: 'ATC voice tape / tower transcript',
+      cost: 1,
+      leadTime: 3,
+      prereqs: [],
+      reveals: [],
+      renderer: 'transcript',
+    },
+    {
       id: 'radar.asr_extract',
       group: 'atc',
       title: 'ASR radar extract (≈4.6 s / Mode C 100 ft)',

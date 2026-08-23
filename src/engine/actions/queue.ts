@@ -60,6 +60,16 @@ export function enqueueRequest(
     costCharged: cost,
   };
 
+  if (item.leadTime === 0) {
+    return {
+      ...state,
+      investigatorDaysRemaining: state.investigatorDaysRemaining - cost,
+      investigatorDaysSpent: state.investigatorDaysSpent + cost,
+      obtainedEvidenceIds: [...state.obtainedEvidenceIds, evidenceId].sort(),
+      actionLog: [...state.actionLog, { type: 'requestEvidence', evidenceId }],
+    };
+  }
+
   return {
     ...state,
     investigatorDaysRemaining: state.investigatorDaysRemaining - cost,

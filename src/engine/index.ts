@@ -55,6 +55,20 @@ export {
 export { simulateFlight, type FlightTrack, type FlightSample } from './sim';
 export { buildEvidence } from './evidence';
 export {
+  INTERVIEW_SUBJECTS,
+  subjectById,
+  conductInterview,
+  unlockedTopics,
+  transcriptEvidenceId,
+  buildInterviewCatalogueItems,
+} from './interviews';
+export type {
+  InterviewSubjectId,
+  InterviewSubject,
+  InterviewTranscript,
+  InterviewLine,
+} from './interviews';
+export {
   createInitialState,
   buildPressureEvents,
   GROUP_DAILY_BURN,

@@ -1,4 +1,4 @@
-/** Seeded pressure events (P1: 3 events) with response choices. */
+/** Seeded pressure events (full set, 6 per case) with response choices. */
 
 import { createRng } from '../rng';
 import type { CaseState } from '../types';
@@ -12,6 +12,8 @@ export interface PressureChoice {
   confidenceDelta: number;
   /** Optional party cooperation deltas. */
   partyDelta?: Record<string, number>;
+  /** Multiply remaining investigator-days (e.g. 0.85 budget cut). */
+  budgetMult?: number;
 }
 
 export interface PressureEvent {
@@ -23,6 +25,7 @@ export interface PressureEvent {
   choices: PressureChoice[];
 }
 
+/** Full DESIGN B2.3 catalogue — first three preserve P1 day-draw order. */
 const TEMPLATES: Omit<PressureEvent, 'id' | 'triggerDay'>[] = [
   {
     title: 'Media leak of a working theory',
@@ -97,17 +100,101 @@ const TEMPLATES: Omit<PressureEvent, 'id' | 'triggerDay'>[] = [
       },
     ],
   },
+  {
+    title: 'Similar incident elsewhere',
+    body: 'Another operator reports a related occurrence; advocates press for an urgent recommendation.',
+    choices: [
+      {
+        id: 'urgent_review',
+        label: 'Open urgent-rec review board',
+        cost: 3,
+        confidenceDelta: 3,
+      },
+      {
+        id: 'monitor',
+        label: 'Monitor and wait for lab results',
+        cost: 1,
+        confidenceDelta: 0,
+      },
+      {
+        id: 'defer',
+        label: 'Defer entirely to the other investigation',
+        cost: 0,
+        confidenceDelta: -5,
+      },
+    ],
+  },
+  {
+    title: 'Family briefing request',
+    body: 'Next of kin ask for a closed factual update before any public statement.',
+    choices: [
+      {
+        id: 'brief_family',
+        label: 'Hold a closed family factual brief',
+        cost: 2,
+        confidenceDelta: 5,
+      },
+      {
+        id: 'written',
+        label: 'Send a written process letter only',
+        cost: 1,
+        confidenceDelta: 1,
+      },
+      {
+        id: 'postpone',
+        label: 'Postpone until more facts land',
+        cost: 0,
+        confidenceDelta: -4,
+      },
+    ],
+  },
+  {
+    title: 'Budget cut',
+    body: 'Headquarters trims investigation support; investigator-days shrink mid-case.',
+    choices: [
+      {
+        id: 'absorb',
+        label: 'Absorb the cut; stand down one group',
+        cost: 0,
+        confidenceDelta: -2,
+        budgetMult: 0.85,
+      },
+      {
+        id: 'appeal',
+        label: 'Appeal for a partial restoration',
+        cost: 2,
+        confidenceDelta: 1,
+        budgetMult: 0.92,
+      },
+      {
+        id: 'public',
+        label: 'Note the constraint in a public update',
+        cost: 1,
+        confidenceDelta: -1,
+        budgetMult: 0.85,
+      },
+    ],
+  },
 ];
 
-/** Build 3 deterministic pressure events for a seed. */
+/** Build 6 deterministic pressure events for a seed (appends draws after P1 trio). */
 export function buildPressureEvents(seed: string): PressureEvent[] {
   const rng = createRng(seed).fork('pressure');
-  const days = [rng.nextInt(3, 12), rng.nextInt(15, 40), rng.nextInt(45, 90)];
-  days.sort((a, b) => a - b);
-  return TEMPLATES.map((t, i) => ({
+  const days = [
+    rng.nextInt(3, 12),
+    rng.nextInt(15, 40),
+    rng.nextInt(45, 90),
+    rng.nextInt(18, 55),
+    rng.nextInt(60, 120),
+    rng.nextInt(80, 150),
+  ];
+  // Keep original relative order of the first three templates; sort all by day.
+  const indexed = TEMPLATES.map((t, i) => ({ t, day: days[i]!, i }));
+  indexed.sort((a, b) => a.day - b.day || a.i - b.i);
+  return indexed.map(({ t, day }, ord) => ({
     ...t,
-    id: `pressure.${i + 1}`,
-    triggerDay: days[i]!,
+    id: `pressure.${ord + 1}`,
+    triggerDay: day,
     choices: t.choices.map((c) => ({ ...c })),
   }));
 }
@@ -140,10 +227,18 @@ export function applyPressureResponse(
     }
   }
 
+  let remaining = state.investigatorDaysRemaining - choice.cost;
+  let spent = state.investigatorDaysSpent + choice.cost;
+  if (choice.budgetMult !== undefined) {
+    const before = remaining;
+    remaining = Math.max(0, Math.floor(remaining * choice.budgetMult));
+    spent += before - remaining;
+  }
+
   return {
     ...state,
-    investigatorDaysRemaining: state.investigatorDaysRemaining - choice.cost,
-    investigatorDaysSpent: state.investigatorDaysSpent + choice.cost,
+    investigatorDaysRemaining: remaining,
+    investigatorDaysSpent: spent,
     publicConfidence: Math.max(
       0,
       Math.min(100, state.publicConfidence + choice.confidenceDelta),
