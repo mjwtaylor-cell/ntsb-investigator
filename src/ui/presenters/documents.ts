@@ -2,6 +2,7 @@ import type { EvidenceItem, GeneratedCase } from '../../engine';
 import { createRng } from '../../engine/rng';
 import { witnessStatements } from '../../engine/evidence/witnesses';
 import { GROUP_LABEL } from './groups';
+import { presentLabBody, presentPartyBody } from './lab';
 
 export interface PaperContent {
   eyebrow: string;
@@ -227,15 +228,28 @@ export function presentDocument(
         meta,
       };
     case 'parties.operator_submission':
+    case 'parties.manufacturer_submission':
+    case 'parties.faa_submission':
+    case 'parties.operator_schedule':
       return {
         eyebrow,
         title: item.title,
         stamp: 'PARTY',
         watermark: 'PARTY SUBMISSION',
-        body: [
-          `${w.operator.name} party submission attributes the outcome primarily to crew failure to maintain airspeed on final.`,
-          'Submission minimises maintenance deferral practice and dispatch weather annotation. Treat as advocacy, not fact.',
-        ],
+        body: presentPartyBody(item, bundle),
+        meta,
+      };
+    case 'lab.materials_fractography':
+    case 'lab.performance_study':
+    case 'lab.simulator_session':
+    case 'lab.fractography_fan_disk':
+    case 'powerplants.engine_teardown':
+    case 'perf.approach_energy_study':
+      return {
+        eyebrow,
+        title: item.title,
+        stamp: 'LAB',
+        body: presentLabBody(item, bundle),
         meta,
       };
     case 'recorders.recovery':
@@ -264,6 +278,38 @@ export function presentDocument(
       };
     }
     default:
+      if (item.id.startsWith('interview.')) {
+        return {
+          eyebrow,
+          title: item.title,
+          stamp: 'INTERVIEW',
+          body: [
+            `${item.title}.`,
+            'Full dialogue is available in the Interview viewer once this transcript is held.',
+            'Treat statements as testimony with reliability limits; cross-check with records.',
+          ],
+          meta,
+        };
+      }
+      if (item.id.startsWith('lab.') || item.id.includes('teardown') || item.id.includes('fractography')) {
+        return {
+          eyebrow,
+          title: item.title,
+          stamp: 'LAB',
+          body: presentLabBody(item, bundle),
+          meta,
+        };
+      }
+      if (item.id.startsWith('parties.')) {
+        return {
+          eyebrow,
+          title: item.title,
+          stamp: 'PARTY',
+          watermark: 'PARTY SUBMISSION',
+          body: presentPartyBody(item, bundle),
+          meta,
+        };
+      }
       return {
         eyebrow,
         title: item.title,

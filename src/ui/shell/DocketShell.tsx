@@ -5,6 +5,8 @@ import {
   CloudSun,
   Radio,
   MessageSquareText,
+  MessagesSquare,
+  BookOpen,
 } from 'lucide-react';
 import { DocketNavigator } from '../docket/DocketNavigator';
 import { ActionDrawer } from '../drawer/ActionDrawer';
@@ -14,6 +16,8 @@ import { WreckageMap } from '../viewers/WreckageMap';
 import { Transcripts } from '../viewers/Transcripts';
 import { RadarTrack } from '../viewers/RadarTrack';
 import { WeatherPanel } from '../viewers/WeatherPanel';
+import { InterviewPanel } from '../viewers/InterviewPanel';
+import { HandbookPanel } from '../handbook/HandbookPanel';
 import { formatBudgetPct } from '../presenters/format';
 import { useCaseStore, type ViewerId } from '../store/caseStore';
 import { getArchetype } from '../../engine';
@@ -25,8 +29,10 @@ const TABS: { id: ViewerId; label: string; icon: typeof FileText }[] = [
   { id: 'fdr', label: 'FDR Strips', icon: Activity },
   { id: 'wreckage', label: 'Wreckage', icon: Map },
   { id: 'transcripts', label: 'Transcripts', icon: MessageSquareText },
+  { id: 'interview', label: 'Interview', icon: MessagesSquare },
   { id: 'radar', label: 'Radar/ADS-B', icon: Radio },
   { id: 'weather', label: 'Weather', icon: CloudSun },
+  { id: 'handbook', label: 'Handbook', icon: BookOpen },
 ];
 
 export function DocketShell() {
@@ -127,6 +133,8 @@ export function DocketShell() {
             {activeViewer === 'transcripts' ? <Transcripts /> : null}
             {activeViewer === 'radar' ? <RadarTrack /> : null}
             {activeViewer === 'weather' ? <WeatherPanel /> : null}
+            {activeViewer === 'interview' ? <InterviewPanel /> : null}
+            {activeViewer === 'handbook' ? <HandbookPanel /> : null}
           </div>
 
           <footer className={styles.footer}>

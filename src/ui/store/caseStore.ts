@@ -18,7 +18,9 @@ export type ViewerId =
   | 'fdr'
   | 'transcripts'
   | 'radar'
-  | 'weather';
+  | 'weather'
+  | 'interview'
+  | 'handbook';
 
 const LOG_PREFIX = 'ntsb:case:';
 const SETTINGS_KEY = 'ntsb:settings';
@@ -258,6 +260,7 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
 }));
 
 function viewerForEvidence(item: EvidenceItem): ViewerId {
+  if (item.id.startsWith('interview.')) return 'interview';
   if (item.id.startsWith('adsb.') || item.id.startsWith('radar.') || item.group === 'atc') {
     if (item.renderer === 'map' || item.renderer === 'trace') return 'radar';
   }
@@ -268,8 +271,9 @@ function viewerForEvidence(item: EvidenceItem): ViewerId {
     case 'map':
     case 'photo-set':
       return 'wreckage';
-    case 'transcript':
     case 'dialogue':
+      return 'interview';
+    case 'transcript':
       return 'transcripts';
     default:
       return 'document';

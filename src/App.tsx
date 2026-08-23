@@ -16,6 +16,8 @@ const VIEWERS: ViewerId[] = [
   'transcripts',
   'radar',
   'weather',
+  'interview',
+  'handbook',
 ];
 
 /** Deep-link / screenshot helper: ?seed=1174&viewer=fdr&unlock=1 */
@@ -85,6 +87,17 @@ function unlockDemoCase() {
   // Extra calendar pad for pressure / decay demos
   if (state.calendarDay < 30) {
     state = advanceTime(state, 30 - state.calendarDay, bundle);
+  }
+
+  // Conduct one unlocked interview topic so transcript evidence exists (DEV screenshots).
+  try {
+    state = applyAction(
+      state,
+      { type: 'conductInterview', subjectId: 'dispatcher', topicId: 'release_weather' },
+      bundle,
+    );
+  } catch {
+    /* topic may be locked on some seeds */
   }
 
   const impact = bundle.flight.samples[bundle.flight.impactIndex];

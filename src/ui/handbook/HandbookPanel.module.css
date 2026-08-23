@@ -1,0 +1,18 @@
+
+.panel {
+  background: var(--ink-800); border: var(--hair); border-radius: var(--radius);
+  padding: 16px 18px; height: 100%; overflow: auto; max-width: 720px;
+}
+.eyebrow {
+  font-family: var(--font-display); font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; font-size: 11px; color: var(--ink-300); margin: 0 0 8px;
+}
+.title {
+  font-family: var(--font-serif); font-weight: 600; font-size: 22px; margin: 0 0 12px;
+}
+.h {
+  font-family: var(--font-display); font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; font-size: 12px; color: var(--orange-300); margin: 16px 0 6px;
+}
+.p { margin: 0 0 8px; font-size: 14px; line-height: 1.55; color: var(--ink-100); }
+.ul { margin: 0 0 8px; padding-left: 18px; font-size: 14px; line-height: 1.5; }

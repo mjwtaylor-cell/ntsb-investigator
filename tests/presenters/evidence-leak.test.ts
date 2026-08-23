@@ -3,6 +3,8 @@ import { generateCase } from '../../src/engine';
 import { presentCvr, presentAtc } from '../../src/ui/presenters/transcripts';
 import { presentDocument, docketNumber } from '../../src/ui/presenters/documents';
 import { witnessStatements } from '../../src/engine/evidence/witnesses';
+import { presentInterviewTranscript } from '../../src/ui/presenters/interviews';
+import { INTERVIEW_SUBJECTS, createInitialState } from '../../src/engine';
 
 const SEEDS = ['1174', '42', '9001', 'a1-case', 't6-seed'];
 
@@ -35,6 +37,19 @@ function collectPresentationStrings(seed: string): string[] {
     if (paper.watermark) out.push(paper.watermark);
   }
   out.push(docketNumber(bundle));
+  const state = createInitialState(bundle);
+  state.obtainedEvidenceIds = bundle.evidence.map((e) => e.id);
+  state.activeGroups = Array.from(new Set(bundle.evidence.map((e) => e.group)));
+  for (const sub of INTERVIEW_SUBJECTS) {
+    for (const topic of sub.topics) {
+      const eid = `interview.${sub.id}.${topic.id}`;
+      if (!bundle.evidence.some((e) => e.id === eid)) continue;
+      const tr = presentInterviewTranscript(eid, state);
+      if (!tr) continue;
+      out.push(tr.title);
+      for (const line of tr.lines) out.push(line.speaker, line.text);
+    }
+  }
   return out;
 }
 

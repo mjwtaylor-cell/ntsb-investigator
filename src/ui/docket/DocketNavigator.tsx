@@ -96,7 +96,8 @@ export function DocketNavigator() {
             st === 'available' &&
             prereqOk &&
             state.investigatorDaysRemaining >= item.cost &&
-            state.activeGroups.includes(active);
+            state.activeGroups.includes(active) &&
+            !item.id.startsWith('interview.');
           return (
             <div
               key={item.id}
