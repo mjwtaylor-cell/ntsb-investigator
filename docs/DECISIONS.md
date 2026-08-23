@@ -59,3 +59,17 @@ Operator names are drawn from Part 91 / 135 / 121 pools and never reuse
 aircraft-family names (Meridian, Kestrel, Aurora, Halcyon). Occupants now
 track minor injuries; CLI prints `N pax + N crew · fatal N · serious N · minor N`.
 Golden hash regenerated after world shape change.
+
+## 22 Aug 2026 — P2 UI: presenters derive paper/CVR/wreckage from engine
+
+Evidence catalogue items remain metadata-only (no payload field). UI presenters
+under `src/ui/presenters/` derive Document / CVR / wreckage / weather / FDR views
+from `GeneratedCase` (world + truth + flight). Engine stays free of DOM imports.
+Autosave stores `seed + difficulty + actionLog` under `ntsb:case:<seed>:log`.
+
+## 22 Aug 2026 — P2 known UI issues closed
+
+- `@fontsource/source-serif-4/600.css` imported in `main.tsx` (real 600 weight)
+- RECOVERED stamp: document eyebrow/title get `padding-right` so stamp clears ~1280
+- Right rail: tab toggle at 900–1200; single-column under 900 (B2.11)
+- FDR strips panel uses flex fill (`height: 100%` / `flex: 1`) in workspace panel

@@ -1,0 +1,28 @@
+
+.panel {
+  background: var(--ink-800); border: var(--hair); border-radius: var(--radius);
+  padding: 12px; height: 100%; overflow: auto; display: flex; flex-direction: column; gap: 12px;
+}
+.eyebrow {
+  font-family: var(--font-display); font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; font-size: 11px; color: var(--ink-300); margin: 0;
+}
+.block {
+  background: var(--ink-900); border: var(--hair); border-radius: var(--radius); padding: 12px;
+}
+.title {
+  font-family: var(--font-display); font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; font-size: 11px; color: var(--orange-300); margin: 0 0 8px;
+}
+.raw {
+  font-family: var(--font-mono); font-size: 12px; white-space: pre-wrap; margin: 0; color: var(--ink-100);
+}
+.body { margin: 0; font-size: 13px; color: var(--ink-100); }
+.table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+.table th, .table td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--ink-700); }
+.empty { color: var(--ink-300); padding: 24px; border: var(--hair); border-radius: var(--radius); background: var(--ink-800); }
+.lock { color: var(--warn); font-size: 12px; }
+.band {
+  border: 1px solid var(--series-1); color: var(--series-1); padding: 8px 10px; border-radius: var(--radius);
+  font-size: 13px;
+}

@@ -1,0 +1,40 @@
+
+.screen {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--ink-950);
+}
+.card {
+  width: min(480px, 100%);
+  background: var(--ink-800);
+  border: var(--hair);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+}
+.brand {
+  font-family: var(--font-display); font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; font-size: 13px; color: var(--orange-500); margin: 0 0 8px;
+}
+.title { margin: 0 0 8px; font-size: 22px; font-weight: 500; }
+.blurb { margin: 0 0 20px; color: var(--ink-300); font-size: 13px; line-height: 1.45; }
+.label {
+  display: block; font-family: var(--font-display); font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; font-size: 11px; color: var(--ink-300); margin-bottom: 6px;
+}
+.input {
+  width: 100%; padding: 10px 12px; background: var(--ink-900); border: var(--hair);
+  border-radius: var(--radius); color: var(--ink-100); font-family: var(--font-mono); font-size: 14px;
+}
+.row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.btn {
+  padding: 8px 14px; background: var(--ink-700); font-size: 13px;
+}
+.btnPrimary {
+  border-color: var(--orange-500); color: var(--orange-300);
+  font-family: var(--font-display); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.error { color: var(--crit); font-size: 12px; margin: 10px 0 0; }
+.hint { margin: 16px 0 0; font-size: 11px; color: var(--ink-300); }

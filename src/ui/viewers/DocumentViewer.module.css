@@ -1,0 +1,101 @@
+
+.wrap { height: 100%; min-height: 0; overflow: auto; }
+.paper {
+  background: var(--paper-50);
+  color: var(--paper-ink);
+  border: 1px solid var(--paper-rule);
+  border-radius: var(--radius);
+  padding: 24px 28px 28px;
+  position: relative;
+  min-height: 420px;
+  overflow: hidden;
+}
+.paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.stamp {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--blue-400);
+  opacity: 0.8;
+  border: 1.5px solid var(--blue-400);
+  padding: 4px 8px;
+  transform: rotate(-2deg);
+  z-index: 1;
+}
+.stampParty { color: var(--orange-500); border-color: var(--orange-500); }
+.eyebrow {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--paper-ink);
+  opacity: 0.65;
+  margin: 0 0 8px;
+  padding-right: 110px; /* keep clear of stamp at ~1280 */
+  max-width: 48ch;
+}
+.title {
+  font-family: var(--font-doc);
+  font-weight: 600;
+  font-size: 20px;
+  margin: 0 0 12px;
+  max-width: 36ch;
+  padding-right: 96px;
+}
+.body {
+  font-family: var(--font-doc);
+  font-size: 16px;
+  line-height: 1.55;
+  max-width: 65ch;
+  margin: 0 0 12px;
+}
+.meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  margin-top: 16px;
+  opacity: 0.7;
+}
+.watermark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-18deg);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 28px;
+  color: var(--orange-500);
+  opacity: 0.12;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.empty {
+  color: var(--ink-300);
+  padding: 24px;
+  border: var(--hair);
+  border-radius: var(--radius);
+  background: var(--ink-800);
+}
+.emptyTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin: 0 0 8px;
+  color: var(--ink-100);
+}
