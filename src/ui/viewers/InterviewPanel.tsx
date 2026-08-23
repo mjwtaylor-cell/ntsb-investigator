@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   INTERVIEW_SUBJECTS,
   unlockedTopics,
@@ -20,6 +20,17 @@ export function InterviewPanel() {
     () => INTERVIEW_SUBJECTS.find((s) => s.id === subjectId)!,
     [subjectId],
   );
+
+  useEffect(() => {
+    if (!state) {
+      setActiveTranscript(null);
+      return;
+    }
+    const held = subject.topics
+      .map((t) => `interview.${subject.id}.${t.id}`)
+      .find((id) => state.obtainedEvidenceIds.includes(id));
+    setActiveTranscript(held ?? null);
+  }, [subject, state]);
 
   if (!bundle || !state) {
     return <div className={styles.empty}>Start a case to open interviews.</div>;

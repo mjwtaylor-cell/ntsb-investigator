@@ -27,6 +27,9 @@ export function enqueueRequest(
   if (state.decayedEvidenceIds.includes(evidenceId)) {
     throw new Error(`Evidence decayed: ${evidenceId}`);
   }
+  if (evidenceId.startsWith('interview.')) {
+    throw new Error('Conduct interview topics via the Interview panel');
+  }
   if (
     state.obtainedEvidenceIds.includes(evidenceId) ||
     state.queue.some(

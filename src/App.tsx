@@ -43,6 +43,10 @@ function useQueryBootstrap() {
     if (viewer && VIEWERS.includes(viewer)) {
       queueMicrotask(() => setViewer(viewer));
     }
+    const evidence = params.get('evidence');
+    if (evidence) {
+      queueMicrotask(() => useCaseStore.getState().selectEvidence(evidence));
+    }
   }, [seed, startCase, resumeIfSaved, setViewer]);
 }
 
@@ -61,6 +65,8 @@ function unlockDemoCase() {
   for (let wave = 0; wave < 12; wave++) {
     let progressed = false;
     for (const item of bundle.evidence) {
+      if (item.id.startsWith('interview.')) continue;
+      if (item.decay !== undefined) continue; // leave perishables for decay UI demos
       if (state.obtainedEvidenceIds.includes(item.id)) continue;
       if (state.queue.some((q) => q.source.type === 'requestEvidence' && q.source.evidenceId === item.id)) {
         continue;
@@ -90,6 +96,12 @@ function unlockDemoCase() {
   }
 
   // Conduct one unlocked interview topic so transcript evidence exists (DEV screenshots).
+  if (state.investigatorDaysRemaining < 1) {
+    state = {
+      ...state,
+      investigatorDaysRemaining: state.investigatorDaysRemaining + 2,
+    };
+  }
   try {
     state = applyAction(
       state,

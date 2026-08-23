@@ -86,3 +86,18 @@ Deferred visual/CLI polish for later phases (Matt cosmetic list):
 - CLI: outcome node labeled `[contributing]` — should print `[outcome]`
 
 Do not fix in P3 gate hygiene; track here for P5/P6.
+
+
+## 22 Aug 2026 — P3 interviews are conduct-only catalogue items
+
+Topic transcript evidence ids (`interview.<subject>.<topic>`) are in the catalogue
+for docket/leak-scan/presenters, but `requestEvidence` rejects them. Players must
+use `conductInterview` (Interview panel) so topic unlocks and knowledge models apply.
+DEV `?unlock=1` skips perishables (so decay UI can show LOST) and tops up budget
+before conducting one dispatcher topic for screenshots.
+
+## 22 Aug 2026 — P3 pressure expands to 6 events; first-trio day draws preserved
+
+`buildPressureEvents` keeps the original three `pressure` stream day draws, then
+appends three more draws for similar-incident / family-briefing / budget-cut.
+Budget-cut choices use `budgetMult` on remaining investigator-days.
