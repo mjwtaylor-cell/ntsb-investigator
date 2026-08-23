@@ -1,53 +1,38 @@
 # STATUS.md
 
-**Phase:** P2 Docket UI — acceptance green (pending parent review)
-**Updated:** 22 Aug 2026 19:05 America/Chicago
+**Phase:** P3 gates complete — P3 feature work NOT started
+**Updated:** 22 Aug 2026 19:31 America/Chicago
 
 ## Current state
 
 - Repo: https://github.com/mjwtaylor-cell/ntsb-investigator
 - Live: https://mjwtaylor-cell.github.io/ntsb-investigator/
-- CI / Pages: redeploy from main pushes.
+- CI green after gate commits (verify on latest hygiene push).
 - Account / GitHub owner: `mjwtaylor-cell`.
-- P1.5 complete (engine untouched this session).
-- P2 Docket UI shipped: shell, docket, all six viewers, action drawer, autosave, endless seed entry; seed 1174 playable end-to-end (no report composer — P4).
+- P1.5 + P2 complete. P3 **gates 1–4** complete. P3 systems (Go Team, interviews, lab, parties, pressure full set, etc.) **not started** this session.
 
-## Verified (P2)
+## Verified (P1.5 — carried forward)
 
-- [x] Shell (top bar, rails, workspace, drawer) + B2.11 responsive (rail tab 900–1200; single-column <900)
-- [x] Docket navigator wired to catalogue / groups (stand up/down, request, secure, open)
-- [x] Document viewer (paper, stamps, derived MEL/dispatch/etc.)
-- [x] Wreckage map (procedural SVG)
-- [x] FDR strips + synced cursor + CVR side panel + track
-- [x] Transcripts
-- [x] Radar/ADS-B
-- [x] Weather panel
-- [x] Action drawer (queue ETAs, advance time, pressure cards)
-- [x] Autosave/resume + endless-mode seed entry
-- [x] Play seed 1174 (`?seed=1174&unlock=1` deep-link for shots; manual play via UI)
-- [x] Screenshots `docs/screenshots/p2-*.png`
-- [x] Known issues from DECISIONS closed (serif 600, stamp flex header, rail collapse, FDR fill)
-- [ ] Lighthouse a11y ≥ 90 — **skipped** (Chrome present; lighthouse not installed this session — note)
-- Console: no app-thrown errors observed in smoke path; headless shot path uses unlock helper
+- Engine coverage 92.57%; solvability 200/200; oracles truth 98 / empty 10 on 1174
+- Determinism hash (1174): `13c54becd6ae5e801fc11d4d325e1e11c7a450a21d1b9bcd28a4c1d94b78efce`
 
-## Checks
+## P3 gate progress
 
-- lint ✓ · tests 52/52 · build ✓ · engine solvability carried from P1.5
+- [x] Gate 1: CI red fixes (`prefer-const` App.tsx; `window.localStorage` smoke) — Actions green
+- [x] Gate 2: CVR/ATC/witness presentation from phrase bank; leak-scan unit test
+- [x] Gate 3: 72-hour sleep/duty table; docket footers `CEN26FAxxx` (no seed/CRM indices)
+- [x] Gate 4: split `flight.ts` (<400); `?unlock=1` behind `import.meta.env.DEV`; P5/P6 cosmetics logged in DECISIONS (CLI `[outcome]` deferred)
+- [ ] P3 feature build (BUILD_PLAN) — **not started**
+
+## Checks (latest hygiene commit)
+
+- lint ✓ · tests 58/58 · build ✓ · solvability carried · leak-scan ✓
 
 ## Screenshots
 
-- docs/screenshots/p2-seed-entry-1440.png
-- docs/screenshots/p2-shell-1440.png
-- docs/screenshots/p2-document-1440.png
-- docs/screenshots/p2-wreckage-1440.png
-- docs/screenshots/p2-fdr-1440.png
-- docs/screenshots/p2-transcripts-1440.png
-- docs/screenshots/p2-radar-1440.png
-- docs/screenshots/p2-weather-1440.png
-- docs/screenshots/p2-shell-390.png
-- docs/screenshots/p2-shell-1100.png
+- Prior P2 shots remain under `docs/screenshots/p2-*.png`
+- No P3 feature screenshots (P3 not started)
 
 ## Next
 
-- Parent GO for P3 Investigation systems (Go Team burn UI depth, interviews, labs, pressure full set, etc.)
-- Optional: run Lighthouse a11y on live Pages after deploy
+- GO P3 feature work per BUILD_PLAN after this gate STATUS

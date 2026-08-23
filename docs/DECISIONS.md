@@ -73,3 +73,16 @@ Autosave stores `seed + difficulty + actionLog` under `ntsb:case:<seed>:log`.
 - RECOVERED stamp: document eyebrow/title get `padding-right` so stamp clears ~1280
 - Right rail: tab toggle at 900–1200; single-column under 900 (B2.11)
 - FDR strips panel uses flex fill (`height: 100%` / `flex: 1`) in workspace panel
+
+
+## 22 Aug 2026 — P5/P6 cosmetics logged (not fixed in P3 gates)
+
+Deferred visual/CLI polish for later phases (Matt cosmetic list):
+
+- Radar track: no turns / approach alignment
+- Wreckage: range rings vs terrain; lack runway/threshold
+- FDR: event-flag label overlap
+- Shell: 390 top bar layout
+- CLI: outcome node labeled `[contributing]` — should print `[outcome]`
+
+Do not fix in P3 gate hygiene; track here for P5/P6.

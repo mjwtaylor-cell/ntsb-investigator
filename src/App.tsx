@@ -31,11 +31,11 @@ function useQueryBootstrap() {
     const qSeed = params.get('seed');
     if (!qSeed || seed) return;
     const viewer = params.get('viewer') as ViewerId | null;
-    const unlock = params.get('unlock') === '1';
+    const unlock = import.meta.env.DEV && params.get('unlock') === '1';
     const resumed = resumeIfSaved(qSeed);
     if (!resumed) startCase(qSeed, 'standard');
     if (unlock) {
-      // Run after store settles
+      // Dev / screenshot helper only — never in production builds (pre-P4).
       queueMicrotask(() => unlockDemoCase());
     }
     if (viewer && VIEWERS.includes(viewer)) {
