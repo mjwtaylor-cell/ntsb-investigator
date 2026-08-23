@@ -6,6 +6,7 @@ export function DocumentViewer() {
   const bundle = useCaseStore((s) => s.bundle);
   const state = useCaseStore((s) => s.state);
   const selectedEvidenceId = useCaseStore((s) => s.selectedEvidenceId);
+  const selectedGroup = useCaseStore((s) => s.selectedGroup);
 
   if (!bundle || !state) {
     return (
@@ -17,17 +18,25 @@ export function DocumentViewer() {
   }
 
   const obtained = state.obtainedEvidenceIds;
-  const id =
+  const preferred =
     selectedEvidenceId && obtained.includes(selectedEvidenceId)
       ? selectedEvidenceId
-      : obtained.find((eid) => {
-          const it = catalogueItem(bundle, eid);
-          return it?.renderer === 'document' || it?.renderer === 'table';
-        }) ??
-        obtained[0] ??
-        null;
+      : null;
+  const fromGroup =
+    preferred ??
+    (selectedGroup
+      ? obtained.find((eid) => catalogueItem(bundle, eid)?.group === selectedGroup)
+      : null);
+  const firstDoc =
+    fromGroup ??
+    obtained.find((eid) => {
+      const it = catalogueItem(bundle, eid);
+      return it?.renderer === 'document' || it?.renderer === 'table';
+    }) ??
+    obtained[0] ??
+    null;
 
-  if (!id) {
+  if (!firstDoc) {
     return (
       <div className={styles.empty}>
         <p className={styles.emptyTitle}>Document</p>
@@ -39,7 +48,7 @@ export function DocumentViewer() {
     );
   }
 
-  const item = catalogueItem(bundle, id);
+  const item = catalogueItem(bundle, firstDoc);
   if (!item) {
     return (
       <div className={styles.empty}>
@@ -49,7 +58,7 @@ export function DocumentViewer() {
     );
   }
 
-  if (!obtained.includes(id)) {
+  if (!obtained.includes(firstDoc)) {
     return (
       <div className={styles.empty}>
         <p className={styles.emptyTitle}>{item.title}</p>
@@ -64,11 +73,13 @@ export function DocumentViewer() {
   return (
     <div className={styles.wrap}>
       <article className={styles.paper} aria-label={paper.title}>
-        {paper.stamp ? (
-          <div className={`${styles.stamp} ${party ? styles.stampParty : ''}`}>{paper.stamp}</div>
-        ) : null}
         {paper.watermark ? <div className={styles.watermark}>{paper.watermark}</div> : null}
-        <p className={styles.eyebrow}>{paper.eyebrow}</p>
+        <div className={styles.headerRow}>
+          <p className={styles.eyebrow}>{paper.eyebrow}</p>
+          {paper.stamp ? (
+            <div className={`${styles.stamp} ${party ? styles.stampParty : ''}`}>{paper.stamp}</div>
+          ) : null}
+        </div>
         <h2 className={styles.title}>{paper.title}</h2>
         {paper.body.map((para) => (
           <p key={para.slice(0, 48)} className={styles.body}>

@@ -1,37 +1,53 @@
 # STATUS.md
 
-**Phase:** P2 Docket UI — in progress
-**Updated:** 22 Aug 2026 18:55 America/Chicago
+**Phase:** P2 Docket UI — acceptance green (pending parent review)
+**Updated:** 22 Aug 2026 19:05 America/Chicago
 
 ## Current state
 
 - Repo: https://github.com/mjwtaylor-cell/ntsb-investigator
 - Live: https://mjwtaylor-cell.github.io/ntsb-investigator/
-- CI green; GitHub Pages green (via Actions).
+- CI / Pages: redeploy from main pushes.
 - Account / GitHub owner: `mjwtaylor-cell`.
-- P1.5 complete. P2 Docket UI started this session.
+- P1.5 complete (engine untouched this session).
+- P2 Docket UI shipped: shell, docket, all six viewers, action drawer, autosave, endless seed entry; seed 1174 playable end-to-end (no report composer — P4).
 
-## Verified (P1.5 — carried forward)
+## Verified (P2)
 
-- Engine coverage 92.57%; solvability 200/200; oracles truth 98 / empty 10 on 1174
-- Determinism hash (1174): `13c54becd6ae5e801fc11d4d325e1e11c7a450a21d1b9bcd28a4c1d94b78efce`
+- [x] Shell (top bar, rails, workspace, drawer) + B2.11 responsive (rail tab 900–1200; single-column <900)
+- [x] Docket navigator wired to catalogue / groups (stand up/down, request, secure, open)
+- [x] Document viewer (paper, stamps, derived MEL/dispatch/etc.)
+- [x] Wreckage map (procedural SVG)
+- [x] FDR strips + synced cursor + CVR side panel + track
+- [x] Transcripts
+- [x] Radar/ADS-B
+- [x] Weather panel
+- [x] Action drawer (queue ETAs, advance time, pressure cards)
+- [x] Autosave/resume + endless-mode seed entry
+- [x] Play seed 1174 (`?seed=1174&unlock=1` deep-link for shots; manual play via UI)
+- [x] Screenshots `docs/screenshots/p2-*.png`
+- [x] Known issues from DECISIONS closed (serif 600, stamp flex header, rail collapse, FDR fill)
+- [ ] Lighthouse a11y ≥ 90 — **skipped** (Chrome present; lighthouse not installed this session — note)
+- Console: no app-thrown errors observed in smoke path; headless shot path uses unlock helper
 
-## P2 progress
+## Checks
 
-- [ ] Shell (top bar, rails, workspace, drawer) + responsive B2.11
-- [ ] Docket navigator wired to catalogue / groups
-- [ ] Document viewer (paper, stamps, real MEL/dispatch text)
-- [ ] Wreckage map
-- [ ] FDR strips + synced cursor + CVR + track
-- [ ] Transcripts
-- [ ] Radar/ADS-B
-- [ ] Weather panel
-- [ ] Action drawer (costs/ETAs, advance time)
-- [ ] Autosave/resume + endless-mode seed entry
-- [ ] Play seed 1174 end to end
-- [ ] Screenshots p2-* + Lighthouse a11y note
-- [ ] Known issues from DECISIONS (font 600, stamp, rail collapse, FDR fill)
+- lint ✓ · tests 52/52 · build ✓ · engine solvability carried from P1.5
+
+## Screenshots
+
+- docs/screenshots/p2-seed-entry-1440.png
+- docs/screenshots/p2-shell-1440.png
+- docs/screenshots/p2-document-1440.png
+- docs/screenshots/p2-wreckage-1440.png
+- docs/screenshots/p2-fdr-1440.png
+- docs/screenshots/p2-transcripts-1440.png
+- docs/screenshots/p2-radar-1440.png
+- docs/screenshots/p2-weather-1440.png
+- docs/screenshots/p2-shell-390.png
+- docs/screenshots/p2-shell-1100.png
 
 ## Next
 
-- Ship P2 acceptance; do not rework engine unless a tiny UI-integration fix is forced.
+- Parent GO for P3 Investigation systems (Go Team burn UI depth, interviews, labs, pressure full set, etc.)
+- Optional: run Lighthouse a11y on live Pages after deploy
